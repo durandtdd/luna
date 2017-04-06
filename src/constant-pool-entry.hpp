@@ -20,17 +20,18 @@
  * | FieldRef           | Class       | NameAndType |        |
  * | MethodRef          | Class       | NameAndType |        |
  * | InterfaceMethodRef | Class       | NameAndType |        |
- * | String             | Index       |             |        |
+ * | String             | Index (ST)  |             |        |
  * | Integer            |             |             | Value  |
  * | Float              |             |             | Value  |
  * | Long               |             |             | Value  |
  * | Double             |             |             | Value  |
  * | NameAndType        | Name        | Descriptor  |        |
- * | Utf8               | Index (str) |             |        |
+ * | Utf8               | Index (ST)  |             |        |
  * | MethodHandle       | Ref kind    | Ref index   |        |
  * | MethodType         | Descriptor  |             |        |
  * | InvokeDynamic      | Bootstrap   | NameAndType |        |
  * +--------------------+-------------+-------------+--------+
+ * ST = String Table
  */
 class ConstantPoolEntry
 {
@@ -112,6 +113,12 @@ public:
      * @param data Value
      */
     void setData(uint64 data);
+
+    /**
+     * @brief Get a string representation of the entry
+     * @return String
+     */
+    std::string str() const;
 
 
 public:
