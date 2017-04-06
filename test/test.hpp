@@ -75,3 +75,7 @@ void testStringToBytes();
  */
 void testDump();
 
+/**
+ * @brief Test the stream reader class
+ */
+void testStreamReader();
