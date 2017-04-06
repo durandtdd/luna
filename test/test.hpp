@@ -79,3 +79,8 @@ void testDump();
  * @brief Test the stream reader class
  */
 void testStreamReader();
+
+/**
+ * @brief Test the ConstantPoolEntry class
+ */
+void testConstantPoolEntry();

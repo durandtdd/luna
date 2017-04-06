@@ -10,5 +10,8 @@ int main()
     // StreamReader
     RUN_TEST(testStreamReader);
 
+    // ConstantPoolEntry
+    RUN_TEST(testConstantPoolEntry);
+
     return 0;
 }
