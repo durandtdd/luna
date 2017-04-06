@@ -61,6 +61,10 @@ private:
     catch(const TestFail& fail)\
     {\
         std::cout << "FAIL\n    " << fail.what() << std::endl;\
+    }\
+    catch(const std::exception& err)\
+    {\
+        std::cout << "FAIL\n    " << "Exception thrown: " << err.what() << std::endl;\
     }
 
 
