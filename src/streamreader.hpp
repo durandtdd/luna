@@ -22,10 +22,21 @@ class StreamReader
 {
     public:
         /**
+         * @brief Stream endianness
+         */
+        enum Endian
+        {
+            LittleEndian,
+            BigEndian
+        };
+
+
+    public:
+        /**
          * @brief Construct a StreamReader
          * @param bytes Bytes to read
          */
-        StreamReader(const std::vector<uint8>& bytes);
+        StreamReader(const std::vector<uint8>& bytes, Endian endian = LittleEndian);
 
         /**
          * @brief Read next byte(s)
@@ -68,9 +79,13 @@ class StreamReader
          */
         bool eos() const;
 
+
     private:
         /** Current offset in the byte stream */
         uint32 m_offset;
+
+        /** Endianness */
+        Endian m_endian;
 
         /** Bytes stream */
         const std::vector<uint8>& m_bytes;
@@ -85,8 +100,18 @@ T StreamReader::read(bool move)
     if(m_offset + sz > m_bytes.size())
         throw EndOfStreamError("Not enough bytes");
 
+    T value;
+
     // Read
-    T value = *reinterpret_cast<const T*>(m_bytes.data() + m_offset);
+    if(m_endian == LittleEndian)
+        value = *reinterpret_cast<const T*>(m_bytes.data() + m_offset);
+    else
+    {
+        std::vector<uint8> buffer(sz);
+        for(uint32 k=0; k<buffer.size(); k++)
+            buffer[sz-1-k] = m_bytes[m_offset+k];
+        value = *reinterpret_cast<const T*>(buffer.data());
+    }
 
     // Move index if needed
     if(move)
