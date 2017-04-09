@@ -19,5 +19,8 @@ int main()
     // Type
     RUN_TEST(testType);
 
+    // Descriptor parser
+    RUN_TEST(testDescriptorParser);
+
     return 0;
 }

@@ -100,3 +100,8 @@ void testConstantPool();
  * @brief Test the Type struct
  */
 void testType();
+
+/**
+ * @brief Test the descripor parser
+ */
+void testDescriptorParser();
