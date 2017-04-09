@@ -13,5 +13,8 @@ int main()
     // ConstantPoolEntry
     RUN_TEST(testConstantPoolEntry);
 
+    // ConstantPool
+    RUN_TEST(testConstantPool);
+
     return 0;
 }

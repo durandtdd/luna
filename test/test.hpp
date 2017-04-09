@@ -88,3 +88,8 @@ void testStreamReader();
  * @brief Test the ConstantPoolEntry class
  */
 void testConstantPoolEntry();
+
+/**
+ * @brief Test the ConstantPoolEntry class
+ */
+void testConstantPool();
