@@ -16,5 +16,8 @@ int main()
     // ConstantPool
     RUN_TEST(testConstantPool);
 
+    // Type
+    RUN_TEST(testType);
+
     return 0;
 }

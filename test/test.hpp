@@ -93,3 +93,8 @@ void testConstantPoolEntry();
  * @brief Test the ConstantPoolEntry class
  */
 void testConstantPool();
+
+/**
+ * @brief Test the Type struct
+ */
+void testType();
