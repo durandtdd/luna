@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 
+#include "../src/common.hpp"
+
 
 class TestFail: public std::exception
 {
@@ -43,7 +45,7 @@ private:
         expr;\
         throw TestFail(__LINE__, #expr);\
     }\
-    catch(const std::exception&)\
+    catch(const Error&)\
     {}
 
 #define FAIL(message)\
