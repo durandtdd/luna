@@ -51,6 +51,9 @@ std::string Type::str() const
         s += "short";
         break;
 
+    case Void:
+        s += "void";
+        break;
     }
 
     for(uint32 k=0; k<dimensions; k++)

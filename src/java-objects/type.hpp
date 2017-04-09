@@ -24,6 +24,7 @@ struct Type
         Int,
         Long,
         Short,
+        Void
     };
 
     /** Variable type */
