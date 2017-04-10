@@ -25,9 +25,6 @@ struct Method
         AccSynthetic = 0x1000
     };
 
-    /** Method access and property flags */
-    uint16 flags = 0;
-
     /** Method type */
     Type type;
 
@@ -36,6 +33,9 @@ struct Method
 
     /** Parameters */
     std::vector<Variable> parameters;
+
+    /** Method access and property flags */
+    uint16 flags = 0;
 
     /**
      * @brief Construct a Method

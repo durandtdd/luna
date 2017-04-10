@@ -23,9 +23,6 @@ struct Class
         AccEnum = 0x4000
     };
 
-    /** Flags */
-    uint16 flags;
-
     /** Class name */
     std::string name;
 
@@ -40,6 +37,9 @@ struct Class
 
     /** Methods */
     std::vector<Method> methods;
+
+    /** Flags */
+    uint16 flags;
 
 
     /**
