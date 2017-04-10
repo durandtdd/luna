@@ -52,3 +52,20 @@ struct Type
      */
     std::string str() const;
 };
+
+
+/**
+ * @brief Compare two types
+ * @param type1 Type 1
+ * @param type2 Type 2
+ * @return True if types are equal
+ */
+bool operator==(const Type& type1, const Type& type2);
+
+/**
+ * @brief Compare two types
+ * @param type1 Type 1
+ * @param type2 Type 2
+ * @return True if types are different
+ */
+bool operator!=(const Type& type1, const Type& type2);

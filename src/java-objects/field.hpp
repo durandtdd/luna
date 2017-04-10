@@ -43,3 +43,21 @@ struct Field: Variable
      */
     std::string str() const;
 };
+
+
+/**
+ * @brief Compare two fields
+ * @param field1 Field 1
+ * @param field2 Field 2
+ * @return True if fields are equal
+ */
+bool operator==(const Field& field1, const Field& field2);
+
+
+/**
+ * @brief Compare two fields
+ * @param field1 Field 1
+ * @param field2 Field 2
+ * @return True if fields are different
+ */
+bool operator!=(const Field& field1, const Field& field2);

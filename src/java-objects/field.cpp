@@ -43,3 +43,17 @@ std::string Field::str() const
 
     return str;
 }
+
+
+bool operator==(const Field& field1, const Field& field2)
+{
+    return (field1.type == field2.type) &&
+            (field1.name == field2.name) &&
+            (field1.flags == field2.flags);
+}
+
+
+bool operator!=(const Field& field1, const Field& field2)
+{
+    return !(field1 == field2);
+}

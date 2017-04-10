@@ -51,3 +51,21 @@ struct Method
      */
     std::string str() const;
 };
+
+
+/**
+ * @brief Compare two methods
+ * @param method1 Method 1
+ * @param method2 Method 2
+ * @return True if methods are equal
+ */
+bool operator==(const Method& method1, const Method& method2);
+
+
+/**
+ * @brief Compare two methods
+ * @param method1 Method 1
+ * @param method2 Method 2
+ * @return True if methods are different
+ */
+bool operator!=(const Method& method1, const Method& method2);

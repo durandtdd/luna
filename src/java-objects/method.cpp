@@ -1,13 +1,15 @@
 #include "method.hpp"
 
+#include <algorithm>
+
 
 Method::Method(const std::string& name, Type type, uint16 flags):
     name(name),
     type(type),
     flags(flags)
 {
-
 }
+
 
 std::string Method::str() const
 {
@@ -63,4 +65,20 @@ std::string Method::str() const
     str += ")";
 
     return str;
+}
+
+
+bool operator==(const Method& method1, const Method& method2)
+{
+    return (method1.type == method2.type) &&
+            (method1.name == method2.name) &&
+            (method1.flags == method2.flags) &&
+            (method1.parameters.size() == method2.parameters.size()) &&
+            std::equal(method1.parameters.begin(), method1.parameters.end(), method2.parameters.begin());
+}
+
+
+bool operator!=(const Method& method1, const Method& method2)
+{
+    return !(method1 == method2);
 }
