@@ -33,11 +33,11 @@ JavaClassFile::JavaClassFile(const std::string& name)
     reader.skip(2); // Access flags
 
     uint16 idxName = reader.read<uint16>();
-    m_name = m_constantPool.string(m_constantPool[idxName].index1());
+    m_class.name = m_constantPool.string(m_constantPool[idxName].index1());
 
     uint16 idxSuperName = reader.read<uint16>();
-    m_superName = m_constantPool.string(m_constantPool[idxSuperName].index1());
-    std::replace(m_superName.begin(), m_superName.end(), '/', '.');
+    m_class.base = m_constantPool.string(m_constantPool[idxSuperName].index1());
+    std::replace(m_class.base.begin(), m_class.base.end(), '/', '.');
 
     readInterfaces(reader);
 
@@ -47,22 +47,28 @@ JavaClassFile::JavaClassFile(const std::string& name)
 }
 
 
+Class JavaClassFile::javaClass() const
+{
+    return m_class;
+}
+
+
 std::string JavaClassFile::decode() const
 {
     std::ostringstream oss;
-    oss << "class " << m_name;
+    oss << "class " << m_class.name;
 
     // Super class
-    if(m_superName != "")
-        oss << " extends " << m_superName;
+    if(m_class.base != "")
+        oss << " extends " << m_class.base;
 
     // Interfaces
-    if(m_interfaces.size() > 0)
+    if(m_class.interfaces.size() > 0)
         oss << " implements ";
-    for(auto it=m_interfaces.begin(); it!=m_interfaces.end(); ++it)
+    for(auto it=m_class.interfaces.begin(); it!=m_class.interfaces.end(); ++it)
     {
         oss << *it;
-        if(it != m_interfaces.end()-1)
+        if(it != m_class.interfaces.end()-1)
             oss << ", ";
     }
 
@@ -70,12 +76,12 @@ std::string JavaClassFile::decode() const
     oss << "{" << "\n";
 
     // Fields
-    for(const Field& field: m_fields)
+    for(const Field& field: m_class.fields)
         oss << "    " << field.str() << ";\n";
     oss << "\n";
 
     // Methods
-    for(const Method& method: m_methods)
+    for(const Method& method: m_class.methods)
     {
         oss << "    " << method.str() << "\n";
         oss << "    {\n";
@@ -188,7 +194,7 @@ void JavaClassFile::readInterfaces(StreamReader &reader)
         uint16 idx = reader.read<uint16>(); // Class index
         std::string interface = m_constantPool.string(m_constantPool[idx].index1());
         std::replace(interface.begin(), interface.end(), '/', '.');
-        m_interfaces.push_back(interface);
+        m_class.interfaces.push_back(interface);
     }
 }
 
@@ -216,7 +222,7 @@ void JavaClassFile::readFields(StreamReader &reader)
         // Attributes
         readAttributes(reader); // TODO
 
-        m_fields.push_back(field);
+        m_class.fields.push_back(field);
     }
 }
 
@@ -256,7 +262,7 @@ void JavaClassFile::readMethods(StreamReader &reader)
         // Attributes
         readAttributes(reader); // TODO
 
-        m_methods.push_back(method);
+        m_class.methods.push_back(method);
     }
 }
 

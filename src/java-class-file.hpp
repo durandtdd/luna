@@ -6,8 +6,7 @@
 #include "common.hpp"
 
 #include "constant-pool.hpp"
-#include "java-objects/field.hpp"
-#include "java-objects/method.hpp"
+#include "java-objects/class.hpp"
 
 
 class StreamReader;
@@ -54,6 +53,8 @@ public:
     std::string decode() const;
 
 
+    Class javaClass() const;
+
 private:
     /**
      * @brief Read the class file header
@@ -99,18 +100,6 @@ private:
     /** Constant pool */
     ConstantPool m_constantPool;
 
-    /** Class name */
-    std::string m_name;
-
-    /** Super class name */
-    std::string m_superName;
-
-    /** Interfaces */
-    std::vector<std::string> m_interfaces;
-
-    /** Fields */
-    std::vector<Field> m_fields;
-
-    /** Methods */
-    std::vector<Method> m_methods;
+    /** Class */
+    Class m_class;
 };
