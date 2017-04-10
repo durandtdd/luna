@@ -105,3 +105,8 @@ void testType();
  * @brief Test the descripor parser
  */
 void testDescriptorParser();
+
+/**
+ * @brief Test the JavaClassFile class
+ */
+void testJavaClassFile();

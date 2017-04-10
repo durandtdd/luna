@@ -22,5 +22,8 @@ int main()
     // Descriptor parser
     RUN_TEST(testDescriptorParser);
 
+    // JavaClassFile
+    RUN_TEST(testJavaClassFile);
+
     return 0;
 }
