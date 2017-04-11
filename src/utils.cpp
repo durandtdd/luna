@@ -40,7 +40,7 @@ std::string dump(const std::vector<uint8>& bytes, uint64 beg, uint64 end)
     while(k < end)
     {
         // Number of bytes on this line
-        std::size_t nb = std::min(end-k, bytesPerLine);
+        std::size_t nb = std::min(end-k, (uint64)bytesPerLine);
 
         // Add offset
         oss << std::setw(8) << std::setfill('0') << k << "   ";
