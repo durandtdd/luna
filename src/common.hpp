@@ -28,7 +28,7 @@ public:
      * @brief Get error message
      * @return Message
      */
-    virtual const char* what() const override { return m_message.c_str();}
+    virtual const char* what() const noexcept override { return m_message.c_str();}
 
 private:
     /** Error message */

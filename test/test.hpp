@@ -16,7 +16,7 @@ public:
         m_msg = "[" + std::to_string(line) + "] " + message;
     }
 
-    const char* what() const override
+    const char* what() const noexcept override
     {
         return m_msg.c_str();
     }
