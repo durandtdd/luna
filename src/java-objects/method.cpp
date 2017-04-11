@@ -3,14 +3,6 @@
 #include <algorithm>
 
 
-Method::Method(const std::string& name, Type type, uint16 flags):
-    name(name),
-    type(type),
-    flags(flags)
-{
-}
-
-
 std::string Method::str() const
 {
     std::string str;

@@ -37,13 +37,6 @@ struct Method
     /** Method access and property flags */
     uint16 flags = 0;
 
-    /**
-     * @brief Construct a Method
-     * @param name Method name
-     * @param type Method type
-     * @param flags Method access and property flags
-     */
-    Method(const std::string& name = "", Type type = Type(), uint16 flags = 0);
 
     /**
      * @brief Return a string representation of the method

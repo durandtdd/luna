@@ -30,7 +30,7 @@ JavaClassFile::JavaClassFile(const std::string& name)
 
     readConstantPool(reader);
 
-    reader.skip(2); // Access flags
+    m_class.flags = reader.read<uint16>(); // Access flags
 
     uint16 idxName = reader.read<uint16>();
     m_class.name = m_constantPool.string(m_constantPool[idxName].index1());
@@ -217,7 +217,8 @@ void JavaClassFile::readFields(StreamReader &reader)
         // Descriptor
         uint16 descriptorIndex = reader.read<uint16>();
         std::string desc = m_constantPool.string(descriptorIndex);
-        field.type = parseDescriptor(desc.begin(), desc.end());
+        auto it = desc.begin();
+        field.type = parseDescriptor(it, desc.end());
 
         // Attributes
         readAttributes(reader); // TODO
@@ -252,7 +253,7 @@ void JavaClassFile::readMethods(StreamReader &reader)
         while(*it != ')')
         {
             Type type = parseDescriptor(it, desc.end());
-            Variable var(type, "param" + std::to_string(method.parameters.size()));
+            Variable var {type, "param" + std::to_string(method.parameters.size())};
             method.parameters.push_back(var);
         }
 

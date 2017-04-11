@@ -10,10 +10,31 @@ std::string Class::str() const
     oss << name << "\n";
 
     oss << "    Type:       ";
+
+    if(flags & AccPublic)
+        oss << "public ";
+
+    if(flags & AccFinal)
+        oss << "final ";
+
+    if(flags & AccSuper)
+        oss << "super ";
+
     if(flags & AccInterface)
-        oss << "interface";
-    else
-        oss << "class";
+        oss << "interface ";
+
+    if(flags & AccAbstract)
+        oss << "abstract ";
+
+    if(flags & AccSynthetic)
+        oss << "synthetic ";
+
+    if(flags & AccAnnotation)
+        oss << "annotation ";
+
+    if(flags & AccEnum)
+        oss << "enum ";
+
     oss << "\n";
 
     oss << "    Base:       " << base << "\n";

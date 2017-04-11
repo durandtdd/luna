@@ -1,13 +1,6 @@
 #include "field.hpp"
 
 
-Field::Field(Type type, const std::string& name, uint16 flags):
-    Variable(type, name),
-    flags(flags)
-{
-}
-
-
 std::string Field::str() const
 {
     std::string str;
@@ -39,7 +32,7 @@ std::string Field::str() const
     if(flags & AccEnum)
         str += "enum ";
 
-    str += Variable::str();
+    str += type.str() + " " + name;
 
     return str;
 }

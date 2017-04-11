@@ -39,7 +39,7 @@ struct Class
     std::vector<Method> methods;
 
     /** Flags */
-    uint16 flags;
+    uint16 flags = 0;
 
 
     /**

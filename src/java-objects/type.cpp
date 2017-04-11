@@ -1,14 +1,6 @@
 #include "type.hpp"
 
 
-Type::Type(Type::Enum type, const std::string& object, uint32 dimensions):
-    type(type),
-    object(object),
-    dimensions(dimensions)
-{
-}
-
-
 std::string Type::str() const
 {
     std::string s = "";

@@ -8,7 +8,7 @@
 #include "variable.hpp"
 
 
-struct Field: Variable
+struct Field
 {
     /**
      * @brief Field access and property flags
@@ -26,16 +26,15 @@ struct Field: Variable
         AccEnum = 0x4000
     };
 
+    /** Field type */
+    Type type;
+
+    /** Field name */
+    std::string name;
+
     /** Field access and property flags */
     uint16 flags = 0;
 
-    /**
-     * @brief Construct a Field
-     * @param type Field type
-     * @param name Field name
-     * @param flags Field access and property flags
-     */
-    Field(Type type = Type(), const std::string& name = "", uint16 flags = 0);
 
     /**
      * @brief Return a string representation of the field

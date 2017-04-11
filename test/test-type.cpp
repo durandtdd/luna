@@ -5,14 +5,14 @@
 
 void testType()
 {
-    ASSERT_EQUAL(Type(Type::Boolean, "", 0).str(), "boolean");
-    ASSERT_EQUAL(Type(Type::Byte, "", 0).str(), "byte");
-    ASSERT_EQUAL(Type(Type::Char, "", 0).str(), "char");
-    ASSERT_EQUAL(Type(Type::Double, "", 0).str(), "double");
-    ASSERT_EQUAL(Type(Type::Float, "", 0).str(), "float");
-    ASSERT_EQUAL(Type(Type::Int, "", 0).str(), "int");
-    ASSERT_EQUAL(Type(Type::Long, "", 0).str(), "long");
-    ASSERT_EQUAL(Type(Type::Short, "", 0).str(), "short");
-    ASSERT_EQUAL(Type(Type::Object, "String", 0).str(), "String");
-    ASSERT_EQUAL(Type(Type::Object, "java.lang.String", 2).str(), "java.lang.String[][]");
+    ASSERT_EQUAL(Type::tBoolean().str(), "boolean");
+    ASSERT_EQUAL(Type::tByte().str(), "byte");
+    ASSERT_EQUAL(Type::tChar().str(), "char");
+    ASSERT_EQUAL(Type::tDouble().str(), "double");
+    ASSERT_EQUAL(Type::tFloat().str(), "float");
+    ASSERT_EQUAL(Type::tInt().str(), "int");
+    ASSERT_EQUAL(Type::tLong().str(), "long");
+    ASSERT_EQUAL(Type::tShort().str(), "short");
+    ASSERT_EQUAL(Type::tObject("String").str(), "String");
+    ASSERT_EQUAL(Type::tObject("java.lang.String", 2).str(), "java.lang.String[][]");
 }
