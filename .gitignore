@@ -5,3 +5,5 @@ bin/
 # Project files
 *.user
 
+# Java class files
+*.class
