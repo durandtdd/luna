@@ -1,18 +1,18 @@
-#include "test.hpp"
+#include "catch/catch.hpp"
 
 #include "../src/java-objects/type.hpp"
 
 
-void testType()
+TEST_CASE("Types")
 {
-    ASSERT_EQUAL(Type::tBoolean().str(), "boolean");
-    ASSERT_EQUAL(Type::tByte().str(), "byte");
-    ASSERT_EQUAL(Type::tChar().str(), "char");
-    ASSERT_EQUAL(Type::tDouble().str(), "double");
-    ASSERT_EQUAL(Type::tFloat().str(), "float");
-    ASSERT_EQUAL(Type::tInt().str(), "int");
-    ASSERT_EQUAL(Type::tLong().str(), "long");
-    ASSERT_EQUAL(Type::tShort().str(), "short");
-    ASSERT_EQUAL(Type::tObject("String").str(), "String");
-    ASSERT_EQUAL(Type::tObject("java.lang.String", 2).str(), "java.lang.String[][]");
+    REQUIRE(Type::tBoolean().str() == "boolean");
+    REQUIRE(Type::tByte().str() == "byte");
+    REQUIRE(Type::tChar().str() == "char");
+    REQUIRE(Type::tDouble().str() == "double");
+    REQUIRE(Type::tFloat().str() == "float");
+    REQUIRE(Type::tInt().str() == "int");
+    REQUIRE(Type::tLong().str() == "long");
+    REQUIRE(Type::tShort().str() == "short");
+    REQUIRE(Type::tObject("String").str() == "String");
+    REQUIRE(Type::tObject("java.lang.String", 2).str() == "java.lang.String[][]");
 }

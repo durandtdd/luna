@@ -1,9 +1,9 @@
-#include "test.hpp"
+#include "catch/catch.hpp"
 
 #include "../src/constant-pool.hpp"
 
 
-void testConstantPool()
+TEST_CASE("Constant pool")
 {
     ConstantPool cp;
     ConstantPoolEntry entry(ConstantPoolEntry::Invalid);
@@ -27,19 +27,19 @@ void testConstantPool()
     cp.addEntry(entry);
     cp.addString("String 1");
 
-    ASSERT_EQUAL(cp[0].index1(), 2);
+    REQUIRE(cp[0].index1() == 2);
     uint64 d = cp[1].data();
-    ASSERT_EQUAL(*reinterpret_cast<double*>(&d), v);
-    ASSERT_EQUAL(cp[2].index1(), 0);
-    ASSERT_EQUAL(cp.string(2), "String 0");
-    ASSERT_EQUAL(cp[3].index1(), 1);
-    ASSERT_EQUAL(cp.string(3), "String 1");
-    ASSERT_EQUAL(cp.size(), 4);
-    ASSERT_EQUAL(cp.stringsSize(), 2);
+    REQUIRE(*reinterpret_cast<double*>(&d) == v);
+    REQUIRE(cp[2].index1() == 0);
+    REQUIRE(cp.string(2) == "String 0");
+    REQUIRE(cp[3].index1() == 1);
+    REQUIRE(cp.string(3) == "String 1");
+    REQUIRE(cp.size() == 4);
+    REQUIRE(cp.stringsSize() == 2);
 
-    ASSERT_ERROR(cp[4]);
-    ASSERT_ERROR(cp.string(4));
-    ASSERT_ERROR(cp.string(0));
+    REQUIRE_THROWS(cp[4]);
+    REQUIRE_THROWS(cp.string(4));
+    REQUIRE_THROWS(cp.string(0));
     cp[3].setIndex1(2);
-    ASSERT_ERROR(cp.string(3));
+    REQUIRE_THROWS(cp.string(3));
 }
