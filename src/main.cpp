@@ -22,6 +22,12 @@ struct Options
 
 void Options::parse(int argc, char **argv)
 {
+    if(argc <= 2)
+    {
+        help = true;
+        return;
+    }
+
     for(int k=1; k<argc; k++)
     {
         std::string arg(argv[k]);
@@ -50,7 +56,7 @@ void Options::parse(int argc, char **argv)
         {
             methods = true;
         }
-        else if(arg == "--info")
+        else if(arg == "--all")
         {
             name = true;
             base = true;
