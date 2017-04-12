@@ -82,7 +82,17 @@ void Options::parse(int argc, char **argv)
 
 std::string help()
 {
-    return "";
+    return "Java class files analysis tool\n"
+            "usage: luna [options] filename\n"
+            "\n"
+            "Options\n"
+            "    --name        Show class name\n"
+            "    --super       Show super class name\n"
+            "    --interfaces  Show interfaces\n"
+            "    --fields      Show fields\n"
+            "    --methods     Show methods\n"
+            "    --all         Show names, interfaces, fields, methods\n"
+            "\n";
 }
 
 
