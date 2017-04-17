@@ -64,7 +64,6 @@ void ConstantPoolEntry::setData(uint64 data)
 std::string ConstantPoolEntry::str() const
 {
     std::ostringstream oss;
-    oss ;
 
     switch(m_type)
     {
