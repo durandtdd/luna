@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(selene CXX)
+project(luna CXX)
 
 
 #==============================================================================#
@@ -15,7 +15,7 @@ add_custom_target(src_include SOURCES ${src_hpp})
 
 # Executable
 add_executable(${PROJECT_NAME} ${src_cpp})
-
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 
 #==============================================================================#
 # Tests                                                                        #
@@ -33,3 +33,4 @@ list(REMOVE_ITEM test_cpp ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
 # Test executable
 add_executable(test_${PROJECT_NAME} ${test_cpp})
+set_property(TARGET test_${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
