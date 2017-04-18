@@ -278,6 +278,10 @@ void JavaClassFile::readMethods(StreamReader& reader)
         {
             switch(attribute->type)
             {
+                case Attribute::Code:
+                    method.code = *dynamic_cast<Code*>(attribute.get());
+                    break;
+
                 default:
                     break;
             }
@@ -301,9 +305,13 @@ std::vector<std::shared_ptr<Attribute>> JavaClassFile::readAttributes(StreamRead
 
         if(m_constantPool.string(nameIndex) == "ConstantValue")
         {
-            std::shared_ptr<Attribute> cv(new ConstantValue());
-            cv->read(reader, m_constantPool);
-            attributes.push_back(cv);
+            attributes.push_back(std::shared_ptr<Attribute>(new ConstantValue()));
+            attributes.back()->read(reader, m_constantPool);
+        }
+        else if(m_constantPool.string(nameIndex) == "Code")
+        {
+            attributes.push_back(std::shared_ptr<Attribute>(new Code()));
+            attributes.back()->read(reader, m_constantPool);
         }
         else
             reader.skip(length);

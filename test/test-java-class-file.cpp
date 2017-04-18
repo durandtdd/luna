@@ -16,7 +16,19 @@ TEST_CASE("Java class fields and methods")
     std::vector<Method> methods;
 
     auto isField = [&cl](const Field& field) {return std::find(cl.fields.begin(), cl.fields.end(), field) != cl.fields.end();};
-    auto isMethod = [&cl](const Method& method) {return std::find(cl.methods.begin(), cl.methods.end(), method) != cl.methods.end();};
+
+    // Compare partially methods (type, name, parameters)
+    auto isMethod = [&cl](const Method& method)
+        {
+            for(const Method& m: cl.methods)
+                if((m.type == method.type) &&
+                        (m.name == method.name) &&
+                        (m.flags == method.flags) &&
+                        (m.parameters.size() == method.parameters.size()) &&
+                        std::equal(m.parameters.begin(), m.parameters.end(), method.parameters.begin()))
+                    return true;
+            return false;
+        };
 
     // Test
     cl = JavaClassFile("test/files/Test.class").javaClass();
@@ -415,4 +427,30 @@ TEST_CASE("Java class fields and methods")
     method.flags = Method::AccPublic;
     REQUIRE(isMethod(method));
     }
+}
+
+
+TEST_CASE("Java methods code")
+{
+    Class cl;
+    std::vector<Method>::iterator method;
+
+    cl = JavaClassFile("test/files/TestCode.class").javaClass();
+
+    method = std::find_if(cl.methods.begin(), cl.methods.end(), [](const auto& m) {return m.name == "empty";});
+    REQUIRE(method != cl.methods.end());
+    REQUIRE(method->code.code.size() == 1);
+    REQUIRE(method->code.code[0] == 0xb1);
+
+    method = std::find_if(cl.methods.begin(), cl.methods.end(), [](const Method& m) {return m.name == "getInt";});
+    REQUIRE(method != cl.methods.end());
+    REQUIRE(method->code.code.size() == 2);
+    REQUIRE(method->code.code[0] == 0x04);
+    REQUIRE(method->code.code[1] == 0xac);
+
+    method = std::find_if(cl.methods.begin(), cl.methods.end(), [](const Method& m) {return m.name == "getDouble";});
+    REQUIRE(method != cl.methods.end());
+    REQUIRE(method->code.code.size() == 4);
+    REQUIRE(method->code.code[0] == 0x14);
+    REQUIRE(method->code.code[3] == 0xaf);
 }

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "attribute.hpp"
 #include "type.hpp"
 #include "variable.hpp"
 
@@ -37,6 +38,8 @@ struct Method
     /** Method access and property flags */
     uint16 flags = 0;
 
+    /** Code */
+    Code code;
 
     /**
      * @brief Return a string representation of the method

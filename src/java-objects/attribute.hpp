@@ -28,6 +28,7 @@ struct Attribute
     enum Type
     {
         ConstantValue,
+        Code,
         Unknown
     };
 
@@ -90,3 +91,82 @@ bool operator==(const ConstantValue& cv1, const ConstantValue& cv2);
  * @return True if constant values are different
  */
 bool operator!=(const ConstantValue& cv1, const ConstantValue& cv2);
+
+
+/**
+ * @brief A Code attribute
+ */
+struct Code: public Attribute
+{
+    /**
+     * @brief An exception in the exception table
+     */
+    struct Exception
+    {
+        /** Start of the exception handler */
+        uint16 start = 0;
+
+        /** End of the exception handler */
+        uint16 end = 0;
+
+        /** Start of the handler */
+        uint16 handler = 0;
+
+        /** Catch type */
+        std::string type;
+    };
+
+
+    /** Code */
+    std::vector<uint8> code;
+
+    /** Exceptions */
+    std::vector<Exception> exceptions;
+
+
+    /**
+     * @brief Construct a Code
+     */
+    Code() {type = Attribute::Code;}
+
+    /**
+     * @see Attribute::read
+     */
+    void read(StreamReader& reader, const ConstantPool& cp) override;
+};
+
+
+/**
+ * @brief Compare two code attributes
+ * @param code1 Code attribute 1
+ * @param code2 Code attribute 2
+ * @return True if code attributes are equal
+ */
+bool operator==(const Code& code1, const Code& code2);
+
+
+/**
+ * @brief Compare two code attributes
+ * @param code1 Code attribute 1
+ * @param code2 Code attribute 2
+ * @return True if code attributes are different
+ */
+bool operator!=(const Code& code1, const Code& code2);
+
+
+/**
+ * @brief Compare two code exceptions
+ * @param exception1 Code exception 1
+ * @param exception2 Code exception 2
+ * @return True if code exceptions are equal
+ */
+bool operator==(const Code::Exception& code1, const Code::Exception& code2);
+
+
+/**
+ * @brief Compare two code exceptions
+ * @param exception1 Code exception 1
+ * @param exception2 Code exception 2
+ * @return True if code exceptions are different
+ */
+bool operator!=(const Code::Exception& code1, const Code::Exception& code2);
