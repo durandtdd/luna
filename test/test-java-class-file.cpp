@@ -5,17 +5,6 @@
 #include "../src/java-class-file.hpp"
 
 
-template<typename T>
-void assertAllIn(const std::vector<T>& elements, const std::vector<T>& all)
-{
-    for(const T& element: elements)
-    {
-        bool isIn = std::any_of(all.begin(), all.end(), [element](T e){return e == element;});
-        REQUIRE(isIn);
-    }
-}
-#include <iostream>
-
 TEST_CASE("Java class fields and methods")
 {
     //TODO Test field synthetic
