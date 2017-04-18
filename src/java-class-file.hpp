@@ -1,11 +1,13 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "common.hpp"
 
 #include "constant-pool.hpp"
+#include "java-objects/attribute.hpp"
 #include "java-objects/class.hpp"
 
 
@@ -89,8 +91,9 @@ private:
     /**
      * @brief Read the attributes
      * @param reader Reader
+     * @return Read attributes
      */
-    void readAttributes(StreamReader& reader);
+    std::vector<std::shared_ptr<Attribute>> readAttributes(StreamReader& reader);
 
 
 private:

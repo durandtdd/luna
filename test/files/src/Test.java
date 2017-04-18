@@ -3,7 +3,6 @@
 public class Test
 {
 	// Field types
-	
 	private boolean booleanField = false;
 	private byte byteField = (byte)0xf0;
 	private char charField = 'a';
@@ -19,6 +18,8 @@ public class Test
 	
 	// Field flags
 	private final int finalField = 123;
+	private final double finalDoubleField = 1.618;
+	private final String finalStringField = "Hello, world";
 	private static int staticField = 456;
 	private volatile int volatileField = 789;
 	private transient int transientField = 987;
@@ -56,7 +57,7 @@ public class Test
 	// Interfaces
 	interface Interface
 	{
-		int interfaceField = 0;
+		int interfaceField = 42;
 		void interfaceMethod();
 	}
 

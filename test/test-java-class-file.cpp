@@ -120,6 +120,28 @@ TEST_CASE("Java class fields and methods")
     field.type = Type::tInt();
     field.name = "finalField";
     field.flags = Field::AccPrivate | Field::AccFinal;
+    field.value.isSet = true;
+    field.value.intValue = 123;
+    REQUIRE(isField(field));
+    }
+
+    {
+    Field field;
+    field.type = Type::tDouble();
+    field.name = "finalDoubleField";
+    field.flags = Field::AccPrivate | Field::AccFinal;
+    field.value.isSet = true;
+    field.value.doubleValue = 1.618;
+    REQUIRE(isField(field));
+    }
+
+    {
+    Field field;
+    field.type = Type::tObject("java.lang.String");
+    field.name = "finalStringField";
+    field.flags = Field::AccPrivate | Field::AccFinal;
+    field.value.isSet = true;
+    field.value.stringValue = "Hello, world";
     REQUIRE(isField(field));
     }
 
@@ -365,6 +387,8 @@ TEST_CASE("Java class fields and methods")
     field.type = Type::tInt();
     field.name = "interfaceField";
     field.flags = Field::AccPublic | Field::AccStatic | Field::AccFinal;
+    field.value.isSet = true;
+    field.value.intValue = 42;
     REQUIRE(isField(field));
     }
 

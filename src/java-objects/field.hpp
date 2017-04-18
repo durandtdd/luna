@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../common.hpp"
+#include "attribute.hpp"
 #include "type.hpp"
 #include "variable.hpp"
 
@@ -35,6 +36,8 @@ struct Field
     /** Field access and property flags */
     uint16 flags = 0;
 
+    /** Initial value */
+    ConstantValue value;
 
     /**
      * @brief Return a string representation of the field

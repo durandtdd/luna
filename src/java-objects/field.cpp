@@ -34,6 +34,58 @@ std::string Field::str() const
 
     str += type.str() + " " + name;
 
+    if(value.isSet)
+    {
+        str += " = ";
+        switch(type.type)
+        {
+            case Type::Boolean:
+                if(type.type == Type::Boolean)
+                {
+                    if(value.intValue == 0)
+                        str += "false";
+                    else
+                        str += "true";
+                }
+                break;
+
+            case Type::Byte:
+                str += std::to_string((std::int8_t)value.intValue);
+                break;
+
+            case Type::Char:
+                str += "(char)" + std::to_string((uint16)value.intValue);
+                break;
+
+            case Type::Double:
+                str += std::to_string(value.doubleValue);
+                break;
+
+            case Type::Float:
+                str += std::to_string(value.doubleValue);
+                break;
+
+            case Type::Int:
+                str += std::to_string((std::int32_t)value.intValue);
+                break;
+
+            case Type::Long:
+                str += std::to_string(value.intValue);
+                break;
+
+            case Type::Short:
+                str += std::to_string((std::int16_t)value.intValue);
+                break;
+
+            default:
+                if(value.stringValue != "")
+                    str += "\"" + value.stringValue + "\"";
+                else
+                    str += "null";
+                break;
+        }
+    }
+
     return str;
 }
 
@@ -42,7 +94,8 @@ bool operator==(const Field& field1, const Field& field2)
 {
     return (field1.type == field2.type) &&
             (field1.name == field2.name) &&
-            (field1.flags == field2.flags);
+            (field1.flags == field2.flags) &&
+            (field1.value == field2.value);
 }
 
 
