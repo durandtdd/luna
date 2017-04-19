@@ -22,6 +22,7 @@ class AttributeError: public Error
  */
 struct Attribute
 {
+public:
     /**
      * @brief Supported attributes
      */
@@ -32,6 +33,8 @@ struct Attribute
         Unknown
     };
 
+
+public:
     /** Type */
     Type type = Unknown;
 
@@ -39,12 +42,9 @@ struct Attribute
     bool isSet = false;
 
 
-    /**
-     * @brief Read the attribute from the stream
-     * @param reader Stream reader
-     * @param cp Constant pool
-     */
-    virtual void read(StreamReader& reader, const ConstantPool& cp) = 0;
+public:
+    /** Destructor */
+    virtual ~Attribute() {}
 };
 
 
@@ -54,6 +54,7 @@ struct Attribute
  */
 struct ConstantValue: public Attribute
 {
+public:
     /** Integer value (only for int types) */
     std::int64_t intValue = 0;
 
@@ -63,15 +64,11 @@ struct ConstantValue: public Attribute
     /** String value (only for string types) */
     std::string stringValue;
 
+public:
     /**
      * @brief Construct a ConstantValue
      */
     ConstantValue() {type = Attribute::ConstantValue;}
-
-    /**
-     * @see Attribute::read
-     */
-    void read(StreamReader& reader, const ConstantPool& cp) override;
 };
 
 
@@ -98,6 +95,7 @@ bool operator!=(const ConstantValue& cv1, const ConstantValue& cv2);
  */
 struct Code: public Attribute
 {
+public:
     /**
      * @brief An exception in the exception table
      */
@@ -117,6 +115,7 @@ struct Code: public Attribute
     };
 
 
+public:
     /** Code */
     std::vector<uint8> code;
 
@@ -124,15 +123,11 @@ struct Code: public Attribute
     std::vector<Exception> exceptions;
 
 
+public:
     /**
      * @brief Construct a Code
      */
     Code() {type = Attribute::Code;}
-
-    /**
-     * @see Attribute::read
-     */
-    void read(StreamReader& reader, const ConstantPool& cp) override;
 };
 
 

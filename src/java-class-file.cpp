@@ -6,6 +6,7 @@
 #include <iterator>
 #include <sstream>
 
+#include "attribute-reader.hpp"
 #include "descriptor-parser.hpp"
 #include "streamreader.hpp"
 
@@ -221,20 +222,14 @@ void JavaClassFile::readFields(StreamReader& reader)
         field.type = parseDescriptor(it, desc.end());
 
         // Attributes
-        auto attributes = readAttributes(reader);
-        for(const std::shared_ptr<Attribute> attribute: attributes)
-        {
-            switch(attribute->type)
-            {
-                case Attribute::ConstantValue:
-                    field.value = *dynamic_cast<ConstantValue*>(attribute.get());
-                    break;
+        AttributeReader ar;
+        ar.readAttributes(reader, m_constantPool);
 
-                default:
-                    break;
-            }
-        }
+        auto ptr = ar.get("ConstantValue");
+        if(ptr != nullptr)
+            field.value = *dynamic_cast<ConstantValue*>(ptr.get());
 
+        // Save field
         m_class.fields.push_back(field);
     }
 }
@@ -273,50 +268,14 @@ void JavaClassFile::readMethods(StreamReader& reader)
         method.type = parseDescriptor(it, desc.end());
 
         // Attributes
-        auto attributes = readAttributes(reader);
-        for(const std::shared_ptr<Attribute> attribute: attributes)
-        {
-            switch(attribute->type)
-            {
-                case Attribute::Code:
-                    method.code = *dynamic_cast<Code*>(attribute.get());
-                    break;
+        AttributeReader ar;
+        ar.readAttributes(reader, m_constantPool);
 
-                default:
-                    break;
-            }
-        }
+        auto ptr = ar.get("Code");
+        if(ptr != nullptr)
+            method.code = *dynamic_cast<Code*>(ptr.get());
 
+        // Save method
         m_class.methods.push_back(method);
     }
 }
-
-
-std::vector<std::shared_ptr<Attribute>> JavaClassFile::readAttributes(StreamReader& reader)
-{
-    uint16 attributesCount = reader.read<uint16>();
-
-    std::vector<std::shared_ptr<Attribute>> attributes;
-
-    for(uint16 k=0; k<attributesCount; k++)
-    {
-        uint16 nameIndex = reader.read<uint16>();
-        uint32 length = reader.read<uint32>();
-
-        if(m_constantPool.string(nameIndex) == "ConstantValue")
-        {
-            attributes.push_back(std::shared_ptr<Attribute>(new ConstantValue()));
-            attributes.back()->read(reader, m_constantPool);
-        }
-        else if(m_constantPool.string(nameIndex) == "Code")
-        {
-            attributes.push_back(std::shared_ptr<Attribute>(new Code()));
-            attributes.back()->read(reader, m_constantPool);
-        }
-        else
-            reader.skip(length);
-    }
-
-    return attributes;
-}
-

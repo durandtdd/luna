@@ -3,45 +3,6 @@
 #include <algorithm>
 
 
-void ConstantValue::read(StreamReader& reader, const ConstantPool& cp)
-{
-    uint16 idx = reader.read<uint16>();
-
-    switch(cp[idx].type())
-    {
-        case ConstantPoolEntry::Integer:
-        case ConstantPoolEntry::Long:
-            isSet = true;
-            intValue = cp[idx].data();
-            break;
-
-        case ConstantPoolEntry::Float:
-        {
-            isSet = true;
-            uint32 f = (uint32)cp[idx].data();
-            doubleValue = *reinterpret_cast<float*>(&f);
-            break;
-        }
-
-        case ConstantPoolEntry::Double:
-        {
-            isSet = true;
-            uint64 d = cp[idx].data();
-            doubleValue = *reinterpret_cast<double*>(&d);
-            break;
-        }
-
-        case ConstantPoolEntry::String:
-            isSet = true;
-            stringValue = cp.string(cp[idx].index1());
-            break;
-
-        default:
-            throw AttributeError("Invalid constant value");
-    }
-}
-
-
 bool operator==(const ConstantValue& cv1, const ConstantValue& cv2)
 {
     return (cv1.type == cv2.type) &&
@@ -55,41 +16,6 @@ bool operator==(const ConstantValue& cv1, const ConstantValue& cv2)
 bool operator!=(const ConstantValue& cv1, const ConstantValue& cv2)
 {
     return !(cv1==cv2);
-}
-
-
-
-void Code::read(StreamReader& reader, const ConstantPool& cp)
-{
-    /*uint16 maxStack =*/ reader.read<uint16>();
-    /*uint16 maxLocal =*/ reader.read<uint16>();
-
-    // Code
-    uint32 codeLength = reader.read<uint32>();
-    for(uint32 k=0; k<codeLength; k++)
-        code.push_back(reader.read<uint8>());
-
-    // Exceptions
-    uint16 exceptionLength = reader.read<uint16>();
-    for(uint32 k=0; k<exceptionLength; k++)
-    {
-        Exception exception;
-        exception.start = reader.read<uint16>();
-        exception.end = reader.read<uint16>();
-        exception.handler = reader.read<uint16>();
-        uint16 idx = reader.read<uint16>();
-        exception.type = cp.string(cp[idx].index1());
-        exceptions.push_back(exception);
-    }
-
-    // Attributes
-    uint16 attributesCount = reader.read<uint16>();
-    for(uint16 k=0; k<attributesCount; k++)
-    {
-        /*uint16 nameIndex =*/ reader.read<uint16>();
-        uint32 length = reader.read<uint32>();
-        reader.skip(length);
-    }
 }
 
 

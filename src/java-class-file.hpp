@@ -88,13 +88,6 @@ private:
      */
     void readMethods(StreamReader& reader);
 
-    /**
-     * @brief Read the attributes
-     * @param reader Reader
-     * @return Read attributes
-     */
-    std::vector<std::shared_ptr<Attribute>> readAttributes(StreamReader& reader);
-
 
 private:
     /** File bytes */
