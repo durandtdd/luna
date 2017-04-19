@@ -457,7 +457,7 @@ TEST_CASE("Decoder bytecodes")
     REQUIRE(inst.operands.size() == 0);
 
     inst = decoder.decode(stringToBytes("02"))[0];
-    REQUIRE(inst.mnemonic == ICONST_ML);
+    REQUIRE(inst.mnemonic == ICONST_M1);
     REQUIRE(inst.operands.size() == 0);
 
     inst = decoder.decode(stringToBytes("03"))[0];

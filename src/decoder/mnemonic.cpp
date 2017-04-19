@@ -6,7 +6,7 @@
 std::string mnemonicStr(Mnemonic mnemonic)
 {
     static std::string names[] = {
-    "nop", "aconst_null", "iconst_ml", "iconst_0", "iconst_1", "iconst_2", "iconst_3", "iconst_4", 
+    "nop", "aconst_null", "iconst_m1", "iconst_0", "iconst_1", "iconst_2", "iconst_3", "iconst_4", 
     "iconst_5", "lconst_0", "lconst_1", "fconst_0", "fconst_1", "fconst_2", "dconst_0", "dconst_1", 
     "bipush", "sipush", "ldc", "ldc_w", "ldc2_w", "iload", "lload", "fload", 
     "dload", "aload", "iload_0", "iload_1", "iload_2", "iload_3", "lload_0", "lload_1", 

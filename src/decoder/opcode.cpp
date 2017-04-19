@@ -6,7 +6,7 @@
 Opcode Opcode::table[256] = {
     {NOP, {}},
     {ACONST_NULL, {}},
-    {ICONST_ML, {}},
+    {ICONST_M1, {}},
     {ICONST_0, {}},
     {ICONST_1, {}},
     {ICONST_2, {}},
