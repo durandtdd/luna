@@ -860,7 +860,16 @@ TEST_CASE("Decoder bytecodes")
     REQUIRE(inst.mnemonic == LNEG);
     REQUIRE(inst.operands.size() == 0);
 
-    //TODO LOOKUPSWITCH
+    inst = decoder.decode(stringToBytes("00 ab 0000 00000012 00000003 fffffffffffffffe 0000000100000002 0000000200000004"))[1];
+    REQUIRE(inst.mnemonic == LOOKUPSWITCH);
+    REQUIRE(inst.operands.size() == 7);
+    REQUIRE(inst.operands[0].get() == 18);
+    REQUIRE(inst.operands[1].get() == -1);
+    REQUIRE(inst.operands[2].get() == -2);
+    REQUIRE(inst.operands[3].get() == 1);
+    REQUIRE(inst.operands[4].get() == 2);
+    REQUIRE(inst.operands[5].get() == 2);
+    REQUIRE(inst.operands[6].get() == 4);
 
     inst = decoder.decode(stringToBytes("81"))[0];
     REQUIRE(inst.mnemonic == LOR);
@@ -987,8 +996,26 @@ TEST_CASE("Decoder bytecodes")
     REQUIRE(inst.mnemonic == SWAP);
     REQUIRE(inst.operands.size() == 0);
 
-    //TODO TABLESWITCH
+    inst = decoder.decode(stringToBytes("000000aa 00000012 00000003 00000006 0000001 00000002 fffffffe ffffffff"))[3];
+    REQUIRE(inst.mnemonic == TABLESWITCH);
+    REQUIRE(inst.operands.size() == 7);
+    REQUIRE(inst.operands[0].get() == 18);
+    REQUIRE(inst.operands[1].get() == 3);
+    REQUIRE(inst.operands[2].get() == 6);
+    REQUIRE(inst.operands[3].get() == 1);
+    REQUIRE(inst.operands[4].get() == 2);
+    REQUIRE(inst.operands[5].get() == -2);
+    REQUIRE(inst.operands[6].get() == -1);
 
-    //TODO WIDE
+    inst = decoder.decode(stringToBytes("c415ffff"))[0];
+    REQUIRE(inst.mnemonic == ILOAD);
+    REQUIRE(inst.operands.size() == 1);
+    REQUIRE(inst.operands[0].get() == 65535);
+
+    inst = decoder.decode(stringToBytes("c484ffffffff"))[0];
+    REQUIRE(inst.mnemonic == IINC);
+    REQUIRE(inst.operands.size() == 2);
+    REQUIRE(inst.operands[0].get() == 65535);
+    REQUIRE(inst.operands[1].get() == -1);
 }
 
