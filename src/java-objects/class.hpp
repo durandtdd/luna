@@ -40,11 +40,4 @@ struct Class
 
     /** Flags */
     uint16 flags = 0;
-
-
-    /**
-     * @brief Return a string representation of the class
-     * @return String
-     */
-    std::string str() const;
 };

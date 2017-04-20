@@ -15,13 +15,6 @@ struct Variable
 
     /** Variable name */
     std::string name;
-
-
-    /**
-     * @brief Return a string representation of the variable
-     * @return String
-     */
-    std::string str() const;
 };
 
 

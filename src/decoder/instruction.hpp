@@ -21,11 +21,4 @@ struct Instruction
 
     /** Instruction offset */
     uint32 offset = 0;
-
-
-    /**
-     * @brief Convert the instruction to a string
-     * @return String
-     */
-    std::string str() const;
 };

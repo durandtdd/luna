@@ -40,10 +40,4 @@ struct Method
 
     /** Code */
     Code code;
-
-    /**
-     * @brief Return a string representation of the method
-     * @return String
-     */
-    std::string str() const;
 };

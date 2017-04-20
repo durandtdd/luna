@@ -38,12 +38,6 @@ struct Type
 
 
     /**
-     * @brief Convert to a string
-     * @return String
-     */
-    std::string str() const;
-
-    /**
      * @brief Convenience function wchich return a Boolean type
      * @param dims Number of dimensions
      * @return Boolean type

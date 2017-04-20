@@ -10,6 +10,7 @@
 #include "decoder/decoder.hpp"
 #include "descriptor-parser.hpp"
 #include "streamreader.hpp"
+#include "string-converter.hpp"
 
 
 JavaClassFile::JavaClassFile(const std::string& name)
@@ -72,56 +73,26 @@ std::string JavaClassFile::decode() const
 {
     std::ostringstream oss;
 
-    oss << "CONTANT POOL\n" << m_constantPool.str() << "\n";
+    oss << "/* CONTANT POOL\n" << StringConverter::str(m_constantPool) << "*/\n";
 
-
-    if(m_class.flags & Class::AccPublic)
-        oss << "public ";
-
-    if(m_class.flags & Class::AccAbstract)
-        oss << "abstract ";
-
-    if(m_class.flags & Class::AccFinal)
-        oss << "final ";
-
-    if(m_class.flags & Class::AccEnum)
-        oss << "enum ";
-    else
-        oss << "class ";
-
-    oss << m_class.name;
-
-    oss << " extends " << m_class.base;
-
-    if(m_class.interfaces.size()>0)
-    {
-        oss << " implements ";
-        for(auto it = m_class.interfaces.begin(); it!=m_class.interfaces.end(); ++it)
-        {
-            oss << *it;
-            if(it != m_class.interfaces.end()-1)
-                oss << ", ";
-        }
-    }
-
-    oss << "\n";
+    oss << StringConverter::str(m_class) << "\n";
     oss << "{\n";
 
     for(const Field& field: m_class.fields)
-        oss << "    " << field.str() << ";\n";
+        oss << "    " << StringConverter::str(field) << ";\n";
 
     oss << "\n";
 
     for(const Method& method: m_class.methods)
     {
         oss << "\n";
-        oss << "    " << method.str() << "\n";
+        oss << "    " << StringConverter::str(method) << "\n";
         oss << "    " << "{\n";
 
         Decoder decoder;
         auto instructions = decoder.decode(method.code.code);
         for(const Instruction& instruction: instructions)
-            oss << "        " << instruction.str() << "\n";
+            oss << "        " << StringConverter::str(instruction) << "\n";
         oss << "    " << "}\n";
     }
 

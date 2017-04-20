@@ -38,10 +38,4 @@ struct Field
 
     /** Initial value */
     ConstantValue value;
-
-    /**
-     * @brief Return a string representation of the field
-     * @return String
-     */
-    std::string str() const;
 };

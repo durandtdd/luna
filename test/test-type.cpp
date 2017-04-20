@@ -5,14 +5,17 @@
 
 TEST_CASE("Types")
 {
-    REQUIRE(Type::tBoolean().str() == "boolean");
-    REQUIRE(Type::tByte().str() == "byte");
-    REQUIRE(Type::tChar().str() == "char");
-    REQUIRE(Type::tDouble().str() == "double");
-    REQUIRE(Type::tFloat().str() == "float");
-    REQUIRE(Type::tInt().str() == "int");
-    REQUIRE(Type::tLong().str() == "long");
-    REQUIRE(Type::tShort().str() == "short");
-    REQUIRE(Type::tObject("String").str() == "String");
-    REQUIRE(Type::tObject("java.lang.String", 2).str() == "java.lang.String[][]");
+    REQUIRE(Type::tBoolean().type == Type::Boolean);
+    REQUIRE(Type::tByte().type == Type::Byte);
+    REQUIRE(Type::tChar().type == Type::Char);
+    REQUIRE(Type::tDouble().type == Type::Double);
+    REQUIRE(Type::tFloat().type == Type::Float);
+    REQUIRE(Type::tInt().type == Type::Int);
+    REQUIRE(Type::tLong().type == Type::Long);
+    REQUIRE(Type::tShort().type == Type::Short);
+    REQUIRE(Type::tObject("String").type == Type::Object);
+    REQUIRE(Type::tObject("String").object == "String");
+    REQUIRE(Type::tObject("java.lang.String", 2).type == Type::Object);
+    REQUIRE(Type::tObject("java.lang.String", 2).object == "java.lang.String");
+    REQUIRE(Type::tObject("java.lang.String", 2).dimensions == 2);
 }
