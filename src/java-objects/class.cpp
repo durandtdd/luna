@@ -54,28 +54,3 @@ std::string Class::str() const
 
     return oss.str();
 }
-
-
-bool operator==(const Class& class1, const Class& class2)
-{
-    return (class1.name == class2.name) &&
-
-            (class1.base == class2.base) &&
-
-            (class1.flags == class2.flags) &&
-
-            (class1.interfaces.size() == class2.interfaces.size()) &&
-            std::equal(class1.interfaces.begin(), class1.interfaces.end(), class2.interfaces.begin()) &&
-
-            (class1.fields.size() == class2.fields.size()) &&
-            std::equal(class1.fields.begin(), class1.fields.end(), class2.fields.begin()) &&
-
-            (class1.methods.size() == class2.methods.size()) &&
-            std::equal(class1.methods.begin(), class1.methods.end(), class2.methods.begin());
-}
-
-
-bool operator!=(const Class& class1, const Class& class2)
-{
-    return !(class1 == class2);
-}

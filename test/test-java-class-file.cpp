@@ -15,9 +15,18 @@ TEST_CASE("Java class fields and methods")
     std::vector<Field> fields;
     std::vector<Method> methods;
 
-    auto isField = [&cl](const Field& field) {return std::find(cl.fields.begin(), cl.fields.end(), field) != cl.fields.end();};
+    // Compare partially fields (type, name, flags)
+    auto isField = [&cl](const Field& field)
+        {
+            for(const Field& f: cl.fields)
+                if((f.type == field.type) &&
+                        (f.name == field.name) &&
+                        (f.flags == field.flags))
+                    return true;
+            return false;
+        };
 
-    // Compare partially methods (type, name, parameters)
+    // Compare partially methods (type, flags, name, parameters)
     auto isMethod = [&cl](const Method& method)
         {
             for(const Method& m: cl.methods)

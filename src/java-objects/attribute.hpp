@@ -72,23 +72,6 @@ public:
 };
 
 
-/**
- * @brief Compare two constant values
- * @param cv1 Constant value 1
- * @param cv2 Constant value 2
- * @return True if constant values are equal
- */
-bool operator==(const ConstantValue& cv1, const ConstantValue& cv2);
-
-
-/**
- * @brief Compare two constant values
- * @param cv1 Constant value 1
- * @param cv2 Constant value 2
- * @return True if constant values are different
- */
-bool operator!=(const ConstantValue& cv1, const ConstantValue& cv2);
-
 
 /**
  * @brief A Code attribute
@@ -130,38 +113,3 @@ public:
     Code() {type = Attribute::Code;}
 };
 
-
-/**
- * @brief Compare two code attributes
- * @param code1 Code attribute 1
- * @param code2 Code attribute 2
- * @return True if code attributes are equal
- */
-bool operator==(const Code& code1, const Code& code2);
-
-
-/**
- * @brief Compare two code attributes
- * @param code1 Code attribute 1
- * @param code2 Code attribute 2
- * @return True if code attributes are different
- */
-bool operator!=(const Code& code1, const Code& code2);
-
-
-/**
- * @brief Compare two code exceptions
- * @param exception1 Code exception 1
- * @param exception2 Code exception 2
- * @return True if code exceptions are equal
- */
-bool operator==(const Code::Exception& code1, const Code::Exception& code2);
-
-
-/**
- * @brief Compare two code exceptions
- * @param exception1 Code exception 1
- * @param exception2 Code exception 2
- * @return True if code exceptions are different
- */
-bool operator!=(const Code::Exception& code1, const Code::Exception& code2);
