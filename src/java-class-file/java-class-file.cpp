@@ -73,7 +73,7 @@ std::string JavaClassFile::decode() const
 {
     std::ostringstream oss;
 
-    oss << "/* CONTANT POOL\n" << StringConverter::str(m_constantPool) << "*/\n";
+    oss << "/* CONSTANT POOL\n" << StringConverter::str(m_constantPool) << "*/\n";
 
     oss << StringConverter::str(m_class) << "\n";
     oss << "{\n";
