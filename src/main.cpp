@@ -11,6 +11,7 @@ struct Options
     bool interfaces = false;
     bool fields = false;
     bool methods = false;
+    bool decode = false;
 
     bool help = false;
     std::string str;
@@ -55,6 +56,10 @@ void Options::parse(int argc, char **argv)
         else if(arg == "--methods")
         {
             methods = true;
+        }
+        else if(arg == "--decode")
+        {
+            decode = true;
         }
         else if(arg == "--all")
         {
@@ -130,6 +135,9 @@ int main(int argc, char** argv)
 
             if(opt.methods)
                 cli.printMethods();
+
+            if(opt.decode)
+                cli.printDecoded();
         }
         catch(const Error& error)
         {

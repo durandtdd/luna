@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "attribute-reader.hpp"
+#include "decoder/decoder.hpp"
 #include "descriptor-parser.hpp"
 #include "streamreader.hpp"
 
@@ -61,42 +62,70 @@ Class JavaClassFile::javaClass() const
 }
 
 
+ConstantPool JavaClassFile::constantPool() const
+{
+    return m_constantPool;
+}
+
+
 std::string JavaClassFile::decode() const
 {
     std::ostringstream oss;
-    oss << "class " << m_class.name;
 
-    // Super class
-    if(m_class.base != "")
-        oss << " extends " << m_class.base;
+    oss << "CONTANT POOL\n" << m_constantPool.str() << "\n";
 
-    // Interfaces
-    if(m_class.interfaces.size() > 0)
-        oss << " implements ";
-    for(auto it=m_class.interfaces.begin(); it!=m_class.interfaces.end(); ++it)
+
+    if(m_class.flags & Class::AccPublic)
+        oss << "public ";
+
+    if(m_class.flags & Class::AccAbstract)
+        oss << "abstract ";
+
+    if(m_class.flags & Class::AccFinal)
+        oss << "final ";
+
+    if(m_class.flags & Class::AccEnum)
+        oss << "enum ";
+    else
+        oss << "class ";
+
+    oss << m_class.name;
+
+    oss << " extends " << m_class.base;
+
+    if(m_class.interfaces.size()>0)
     {
-        oss << *it;
-        if(it != m_class.interfaces.end()-1)
-            oss << ", ";
+        oss << " implements ";
+        for(auto it = m_class.interfaces.begin(); it!=m_class.interfaces.end(); ++it)
+        {
+            oss << *it;
+            if(it != m_class.interfaces.end()-1)
+                oss << ", ";
+        }
     }
 
     oss << "\n";
-    oss << "{" << "\n";
+    oss << "{\n";
 
-    // Fields
     for(const Field& field: m_class.fields)
         oss << "    " << field.str() << ";\n";
+
     oss << "\n";
 
-    // Methods
     for(const Method& method: m_class.methods)
     {
+        oss << "\n";
         oss << "    " << method.str() << "\n";
-        oss << "    {\n";
-        oss << "    }\n\n";
+        oss << "    " << "{\n";
+
+        Decoder decoder;
+        auto instructions = decoder.decode(method.code.code);
+        for(const Instruction& instruction: instructions)
+            oss << "        " << instruction.str() << "\n";
+        oss << "    " << "}\n";
     }
 
-    oss << "}" << std::endl;
+    oss << "}\n";
 
     return oss.str();
 }

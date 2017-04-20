@@ -101,6 +101,7 @@ std::vector<Instruction> Decoder::decode(const std::vector<uint8>& bytes)
     while(!reader.eos())
     {
         Instruction instruction;
+        instruction.offset = reader.tellg();
 
         // Get opcode "template"
         Opcode opcode = Opcode::table[reader.read<uint8>()];

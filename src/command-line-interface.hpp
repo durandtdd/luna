@@ -59,6 +59,16 @@ public:
      */
     void printMethods() const;
 
+    /**
+     * @brief Print constant pool
+     */
+    void printConstantPool() const;
+
+    /**
+     * @brief Print decoded class
+     */
+    void printDecoded() const;
+
 
 private:
     /** Java class file */

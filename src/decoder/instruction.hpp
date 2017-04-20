@@ -19,6 +19,9 @@ struct Instruction
     /** Operands (depends on instruction) */
     std::vector<Operand> operands;
 
+    /** Instruction offset */
+    uint32 offset = 0;
+
 
     /**
      * @brief Convert the instruction to a string

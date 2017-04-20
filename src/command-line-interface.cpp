@@ -1,6 +1,7 @@
 #include "command-line-interface.hpp"
 
 #include <iostream>
+#include <sstream>
 
 
 CommandLineInterface::CommandLineInterface(const std::string& filename)
@@ -56,4 +57,16 @@ void CommandLineInterface::printMethods() const
     for(const Method& method: m_class.methods)
         std::cout << "    " << method.str() << "\n";
     std::cout << "\n";
+}
+
+
+void CommandLineInterface::printConstantPool() const
+{
+    std::cout << m_file.constantPool().str() << std::endl;
+}
+
+
+void CommandLineInterface::printDecoded() const
+{
+    std::cout << m_file.decode() << std::endl;
 }

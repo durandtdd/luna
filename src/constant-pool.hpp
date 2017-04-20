@@ -75,6 +75,12 @@ public:
      */
     std::size_t stringsSize() const;
 
+    /**
+     * @brief Print to string
+     * @return String
+     */
+    std::string str() const;
+
 
 private:
     /** Entries */

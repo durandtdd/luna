@@ -1,5 +1,7 @@
 #include "constant-pool.hpp"
 
+#include <sstream>
+
 
 void ConstantPool::addEntry(const ConstantPoolEntry& cpe)
 {
@@ -55,4 +57,17 @@ size_t ConstantPool::size() const
 size_t ConstantPool::stringsSize() const
 {
     return m_strings.size();
+}
+
+
+std::string ConstantPool::str() const
+{
+    std::ostringstream oss;
+
+    oss << "[\n";
+    for(const auto& entry: m_entries)
+        oss << "    " << entry.str() << "\n";
+    oss << "]\n";
+
+    return oss.str();
 }

@@ -68,6 +68,13 @@ public:
      */
     Class javaClass() const;
 
+    /**
+     * @brief Get constant pool
+     * @return Constant pool
+     */
+    ConstantPool constantPool() const;
+
+
 private:
     /**
      * @brief Read the class file header
