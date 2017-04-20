@@ -41,12 +41,20 @@ public:
 class JavaClassFile
 {
 public:
+
     /**
-     * @brief Construct a JavaClassFile
+     * @brief Construct a JavaClassFile from file
      * @param name Filename
-     * @throw Error Subclass thrown if an error occurs
+     * @throw Error Thrown if an error occurs
      */
-    JavaClassFile(const std::string& name);
+    JavaClassFile(const std::string& name = "");
+
+    /**
+     * @brief Open a class file
+     * @param name Filename
+     * @throw Error Thrown if an error occurs
+     */
+    void open(const std::string& name);
 
     /**
      * @brief Decode the class file to a string
@@ -54,7 +62,10 @@ public:
      */
     std::string decode() const;
 
-
+    /**
+     * @brief Get the class stored in the file
+     * @return Class
+     */
     Class javaClass() const;
 
 private:

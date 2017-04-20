@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "java-class-file.hpp"
+#include "command-line-interface.hpp"
 
 
 struct Options
@@ -96,49 +96,6 @@ std::string help()
 }
 
 
-void printName(const Class& cl)
-{
-    std::cout << "Name:\n";
-    std::cout << "    " << cl.name << "\n";
-    std::cout << "\n";
-}
-
-
-void printBase(const Class& cl)
-{
-    std::cout << "Super:\n";
-    std::cout << "    " << cl.base << "\n";
-    std::cout << "\n";
-}
-
-
-void printInterfaces(const Class& cl)
-{
-    std::cout << "Interfaces:\n";
-    for(const std::string& interface: cl.interfaces)
-        std::cout << "    " << interface << "\n";
-    std::cout << "\n";
-}
-
-
-void printFields(const Class& cl)
-{
-    std::cout << "Fields:\n";
-    for(const Field& field: cl.fields)
-        std::cout << "    " << field.str() << "\n";
-    std::cout << "\n";
-}
-
-
-void printMethods(const Class& cl)
-{
-    std::cout << "Methods:\n";
-    for(const Method& method: cl.methods)
-        std::cout << "    " << method.str() << "\n";
-    std::cout << "\n";
-}
-
-
 int main(int argc, char** argv)
 {
     Options opt;
@@ -157,23 +114,22 @@ int main(int argc, char** argv)
     {
         try
         {
-            JavaClassFile file(opt.str);
-            Class cl = file.javaClass();
+            CommandLineInterface cli(opt.str);
 
             if(opt.name)
-                printName(cl);
+                cli.printName();
 
             if(opt.base)
-                printBase(cl);
+                cli.printSuper();
 
             if(opt.interfaces)
-                printInterfaces(cl);
+                cli.printInterfaces();
 
             if(opt.fields)
-                printFields(cl);
+                cli.printFields();
 
             if(opt.methods)
-                printMethods(cl);
+                cli.printMethods();
         }
         catch(const Error& error)
         {

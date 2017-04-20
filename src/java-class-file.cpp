@@ -13,6 +13,13 @@
 
 JavaClassFile::JavaClassFile(const std::string& name)
 {
+    if(name != "")
+        open(name);
+}
+
+
+void JavaClassFile::open(const std::string& name)
+{
     // Read file
     std::ifstream file(name, std::ios::in | std::ios::binary);
     if(!file.is_open())
