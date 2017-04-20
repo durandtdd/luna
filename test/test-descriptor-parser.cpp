@@ -1,6 +1,6 @@
 #include "catch/catch.hpp"
 
-#include "../src/descriptor-parser.hpp"
+#include "../src/java-class-file/descriptor-parser.hpp"
 
 
 TEST_CASE("Descriptor parsing")

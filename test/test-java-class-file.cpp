@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "../src/java-class-file.hpp"
+#include "../src/java-class-file/java-class-file.hpp"
 
 
 TEST_CASE("Java class fields and methods")

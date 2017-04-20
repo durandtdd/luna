@@ -3,7 +3,7 @@
 #include <string>
 
 #include "common.hpp"
-#include "java-class-file.hpp"
+#include "java-class-file/java-class-file.hpp"
 #include "java-objects/class.hpp"
 
 

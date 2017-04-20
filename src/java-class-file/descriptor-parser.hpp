@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "common.hpp"
-#include "java-objects/type.hpp"
+#include "../common.hpp"
+#include "../java-objects/type.hpp"
 
 
 /**

@@ -4,9 +4,9 @@
 #include <memory>
 #include <string>
 
+#include "../streamreader.hpp"
+#include "../java-objects/attribute.hpp"
 #include "constant-pool.hpp"
-#include "streamreader.hpp"
-#include "java-objects/attribute.hpp"
 
 
 /**

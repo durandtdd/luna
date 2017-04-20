@@ -1,7 +1,7 @@
 #pragma once
 
-#include "constant-pool.hpp"
 #include "decoder/instruction.hpp"
+#include "java-class-file/constant-pool.hpp"
 #include "java-objects/type.hpp"
 #include "java-objects/variable.hpp"
 #include "java-objects/field.hpp"

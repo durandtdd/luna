@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
-#include "common.hpp"
-
+#include "../common.hpp"
+#include "../java-objects/attribute.hpp"
+#include "../java-objects/class.hpp"
 #include "constant-pool.hpp"
-#include "java-objects/attribute.hpp"
-#include "java-objects/class.hpp"
+
 
 
 class StreamReader;

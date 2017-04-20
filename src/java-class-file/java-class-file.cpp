@@ -6,11 +6,11 @@
 #include <iterator>
 #include <sstream>
 
+#include "../streamreader.hpp"
+#include "../string-converter.hpp"
+#include "../decoder/decoder.hpp"
 #include "attribute-reader.hpp"
-#include "decoder/decoder.hpp"
 #include "descriptor-parser.hpp"
-#include "streamreader.hpp"
-#include "string-converter.hpp"
 
 
 JavaClassFile::JavaClassFile(const std::string& name)

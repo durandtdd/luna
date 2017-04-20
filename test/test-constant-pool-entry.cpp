@@ -1,6 +1,6 @@
 #include "catch/catch.hpp"
 
-#include "../src/constant-pool-entry.hpp"
+#include "../src/java-class-file/constant-pool-entry.hpp"
 
 
 TEST_CASE("Constant pool entry")
