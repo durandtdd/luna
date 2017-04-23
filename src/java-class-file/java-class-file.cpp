@@ -6,11 +6,21 @@
 #include <iterator>
 #include <sstream>
 
+#include "../streamreader.hpp"
+#include "../string-converter.hpp"
+#include "../decoder/decoder.hpp"
+#include "attribute-reader.hpp"
 #include "descriptor-parser.hpp"
-#include "streamreader.hpp"
 
 
 JavaClassFile::JavaClassFile(const std::string& name)
+{
+    if(name != "")
+        open(name);
+}
+
+
+void JavaClassFile::open(const std::string& name)
 {
     // Read file
     std::ifstream file(name, std::ios::in | std::ios::binary);
@@ -53,42 +63,40 @@ Class JavaClassFile::javaClass() const
 }
 
 
+ConstantPool JavaClassFile::constantPool() const
+{
+    return m_constantPool;
+}
+
+
 std::string JavaClassFile::decode() const
 {
     std::ostringstream oss;
-    oss << "class " << m_class.name;
 
-    // Super class
-    if(m_class.base != "")
-        oss << " extends " << m_class.base;
+    oss << "/* CONSTANT POOL\n" << StringConverter::str(m_constantPool) << "*/\n";
 
-    // Interfaces
-    if(m_class.interfaces.size() > 0)
-        oss << " implements ";
-    for(auto it=m_class.interfaces.begin(); it!=m_class.interfaces.end(); ++it)
-    {
-        oss << *it;
-        if(it != m_class.interfaces.end()-1)
-            oss << ", ";
-    }
+    oss << StringConverter::str(m_class) << "\n";
+    oss << "{\n";
 
-    oss << "\n";
-    oss << "{" << "\n";
-
-    // Fields
     for(const Field& field: m_class.fields)
-        oss << "    " << field.str() << ";\n";
+        oss << "    " << StringConverter::str(field) << ";\n";
+
     oss << "\n";
 
-    // Methods
     for(const Method& method: m_class.methods)
     {
-        oss << "    " << method.str() << "\n";
-        oss << "    {\n";
-        oss << "    }\n\n";
+        oss << "\n";
+        oss << "    " << StringConverter::str(method) << "\n";
+        oss << "    " << "{\n";
+
+        Decoder decoder;
+        auto instructions = decoder.decode(method.code.code);
+        for(const Instruction& instruction: instructions)
+            oss << "        " << StringConverter::str(instruction) << "\n";
+        oss << "    " << "}\n";
     }
 
-    oss << "}" << std::endl;
+    oss << "}\n";
 
     return oss.str();
 }
@@ -185,7 +193,7 @@ void JavaClassFile::readConstantPool(StreamReader& reader)
 }
 
 
-void JavaClassFile::readInterfaces(StreamReader &reader)
+void JavaClassFile::readInterfaces(StreamReader& reader)
 {
     uint16 interfacesCount = reader.read<uint16>();
 
@@ -199,7 +207,7 @@ void JavaClassFile::readInterfaces(StreamReader &reader)
 }
 
 
-void JavaClassFile::readFields(StreamReader &reader)
+void JavaClassFile::readFields(StreamReader& reader)
 {
     uint16 fieldsCount = reader.read<uint16>();
 
@@ -221,14 +229,20 @@ void JavaClassFile::readFields(StreamReader &reader)
         field.type = parseDescriptor(it, desc.end());
 
         // Attributes
-        readAttributes(reader); // TODO
+        AttributeReader ar;
+        ar.readAttributes(reader, m_constantPool);
 
+        auto ptr = ar.get("ConstantValue");
+        if(ptr != nullptr)
+            field.value = *dynamic_cast<ConstantValue*>(ptr.get());
+
+        // Save field
         m_class.fields.push_back(field);
     }
 }
 
 
-void JavaClassFile::readMethods(StreamReader &reader)
+void JavaClassFile::readMethods(StreamReader& reader)
 {
     uint16 methodsCount = reader.read<uint16>();
 
@@ -261,23 +275,14 @@ void JavaClassFile::readMethods(StreamReader &reader)
         method.type = parseDescriptor(it, desc.end());
 
         // Attributes
-        readAttributes(reader); // TODO
+        AttributeReader ar;
+        ar.readAttributes(reader, m_constantPool);
 
+        auto ptr = ar.get("Code");
+        if(ptr != nullptr)
+            method.code = *dynamic_cast<Code*>(ptr.get());
+
+        // Save method
         m_class.methods.push_back(method);
     }
 }
-
-
-void JavaClassFile::readAttributes(StreamReader &reader)
-{
-    uint16 attributesCount = reader.read<uint16>();
-
-    for(uint16 k=0; k<attributesCount; k++)
-    {
-        uint16 nameIndex = reader.read<uint16>();
-        uint32 length = reader.read<uint32>();
-
-        reader.skip(length);
-    }
-}
-

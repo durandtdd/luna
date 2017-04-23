@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../common.hpp"
+#include "attribute.hpp"
 #include "type.hpp"
 #include "variable.hpp"
 
@@ -35,28 +36,6 @@ struct Field
     /** Field access and property flags */
     uint16 flags = 0;
 
-
-    /**
-     * @brief Return a string representation of the field
-     * @return String
-     */
-    std::string str() const;
+    /** Initial value */
+    ConstantValue value;
 };
-
-
-/**
- * @brief Compare two fields
- * @param field1 Field 1
- * @param field2 Field 2
- * @return True if fields are equal
- */
-bool operator==(const Field& field1, const Field& field2);
-
-
-/**
- * @brief Compare two fields
- * @param field1 Field 1
- * @param field2 Field 2
- * @return True if fields are different
- */
-bool operator!=(const Field& field1, const Field& field2);

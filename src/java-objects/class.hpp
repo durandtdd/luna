@@ -40,29 +40,4 @@ struct Class
 
     /** Flags */
     uint16 flags = 0;
-
-
-    /**
-     * @brief Return a string representation of the class
-     * @return String
-     */
-    std::string str() const;
 };
-
-
-/**
- * @brief Compare two classes
- * @param class1 Class 1
- * @param class2 Class 2
- * @return True if classes are equal
- */
-bool operator==(const Class& class1, const Class& class2);
-
-
-/**
- * @brief Compare two classes
- * @param class1 Class 1
- * @param class2 Class 2
- * @return True if classes are different
- */
-bool operator!=(const Class& class1, const Class& class2);

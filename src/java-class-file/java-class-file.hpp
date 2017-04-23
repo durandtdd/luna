@@ -1,12 +1,14 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
-#include "common.hpp"
-
+#include "../common.hpp"
+#include "../java-objects/attribute.hpp"
+#include "../java-objects/class.hpp"
 #include "constant-pool.hpp"
-#include "java-objects/class.hpp"
+
 
 
 class StreamReader;
@@ -39,12 +41,20 @@ public:
 class JavaClassFile
 {
 public:
+
     /**
-     * @brief Construct a JavaClassFile
+     * @brief Construct a JavaClassFile from file
      * @param name Filename
-     * @throw Error Subclass thrown if an error occurs
+     * @throw Error Thrown if an error occurs
      */
-    JavaClassFile(const std::string& name);
+    JavaClassFile(const std::string& name = "");
+
+    /**
+     * @brief Open a class file
+     * @param name Filename
+     * @throw Error Thrown if an error occurs
+     */
+    void open(const std::string& name);
 
     /**
      * @brief Decode the class file to a string
@@ -52,8 +62,18 @@ public:
      */
     std::string decode() const;
 
-
+    /**
+     * @brief Get the class stored in the file
+     * @return Class
+     */
     Class javaClass() const;
+
+    /**
+     * @brief Get constant pool
+     * @return Constant pool
+     */
+    ConstantPool constantPool() const;
+
 
 private:
     /**
@@ -85,12 +105,6 @@ private:
      * @param reader Reader
      */
     void readMethods(StreamReader& reader);
-
-    /**
-     * @brief Read the attributes
-     * @param reader Reader
-     */
-    void readAttributes(StreamReader& reader);
 
 
 private:

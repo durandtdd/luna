@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "common.hpp"
+#include "../common.hpp"
 
 
 
@@ -113,12 +113,6 @@ public:
      * @param data Value
      */
     void setData(uint64 data);
-
-    /**
-     * @brief Get a string representation of the entry
-     * @return String
-     */
-    std::string str() const;
 
 
 public:

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "common.hpp"
+#include "../common.hpp"
 #include "constant-pool-entry.hpp"
 
 

@@ -2,9 +2,9 @@
 
 
 StreamReader::StreamReader(const std::vector<uint8>& bytes, Endian endian):
-    m_bytes(bytes),
     m_offset(0),
-    m_endian(endian)
+    m_endian(endian),
+    m_bytes(bytes)
 {
 }
 

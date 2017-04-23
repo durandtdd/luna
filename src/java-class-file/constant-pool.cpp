@@ -1,5 +1,7 @@
 #include "constant-pool.hpp"
 
+#include <sstream>
+
 
 void ConstantPool::addEntry(const ConstantPoolEntry& cpe)
 {
