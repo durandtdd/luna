@@ -17,3 +17,4 @@ Current supported options are
 | --fields     | Show the fields            |
 | --methods    | Show the methods           |
 | --info       | Show the names, interfaces, fields and methods |
+| --decode     | Decode class file to java (bytecode) file |
