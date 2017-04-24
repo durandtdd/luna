@@ -1,5 +1,7 @@
 #include "attribute-reader.hpp"
 
+#include "../utils.hpp"
+
 
 void AttributeReader::readAttributes(StreamReader& reader, const ConstantPool& pool)
 {
@@ -53,20 +55,14 @@ void AttributeReader::readConstantValue(StreamReader& reader, const ConstantPool
             break;
 
         case ConstantPoolEntry::Float:
-        {
             a->isSet = true;
-            uint32 f = (uint32)pool[idx].data();
-            a->doubleValue = *reinterpret_cast<float*>(&f);
+            a->doubleValue = bytesToFloat(pool[idx].data());
             break;
-        }
 
         case ConstantPoolEntry::Double:
-        {
             a->isSet = true;
-            uint64 d = pool[idx].data();
-            a->doubleValue = *reinterpret_cast<double*>(&d);
+            a->doubleValue = bytesToDouble(pool[idx].data());
             break;
-        }
 
         case ConstantPoolEntry::String:
             a->isSet = true;

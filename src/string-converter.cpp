@@ -3,6 +3,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "utils.hpp"
+
 
 std::string StringConverter::str(const Type& type)
 {
@@ -249,12 +251,9 @@ std::string StringConverter::str(const ConstantPool& cp)
                 break;
 
             case ConstantPoolEntry::Float:
-            {
                 oss << "[Float] ";
-                uint64 v = cp[k].data();
-                oss << "Value = " << *reinterpret_cast<float*>(&v);
+                oss << "Value = " << bytesToFloat(cp[k].data());
                 break;
-            }
 
             case ConstantPoolEntry::Long:
                 oss << "[Long] ";
@@ -262,12 +261,9 @@ std::string StringConverter::str(const ConstantPool& cp)
                 break;
 
             case ConstantPoolEntry::Double:
-            {
                 oss << "[Double] ";
-                uint64 v = cp[k].data();
-                oss << "Value = " << *reinterpret_cast<double*>(&v);
+                oss << "Value = " << bytesToDouble(cp[k].data());
                 break;
-            }
 
             case ConstantPoolEntry::Class:
                 oss << "[Class] ";

@@ -70,3 +70,14 @@ std::string dump(const std::vector<uint8>& bytes, uint64 beg, uint64 end)
     return oss.str();
 }
 
+
+float bytesToFloat(uint64 bytes)
+{
+    uint32 b = (uint32)bytes & 0xffffffff;
+    return *reinterpret_cast<float*>(&b);
+}
+
+double bytesToDouble(uint64 bytes)
+{
+    return *reinterpret_cast<double*>(&bytes);
+}

@@ -24,3 +24,18 @@ std::vector<uint8> stringToBytes(const std::string& hex);
 */
 std::string dump(const std::vector<uint8>& bytes, uint64 beg = 0, uint64 end = -1);
 
+
+/**
+ * @brief Convert little endian bytes to float
+ * @param bytes Bytes
+ * @return Float
+ */
+float bytesToFloat(uint64 bytes);
+
+
+/**
+ * @brief Convert little endian bytes to double
+ * @param bytes Bytes
+ * @return Double
+ */
+double bytesToDouble(uint64 bytes);
