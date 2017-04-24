@@ -5,7 +5,7 @@
 
 #include "../common.hpp"
 #include "../streamreader.hpp"
-#include "../java-class-file/constant-pool.hpp"
+
 
 /**
  * @brief Error thrown by attributes

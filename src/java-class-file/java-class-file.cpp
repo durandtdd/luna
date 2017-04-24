@@ -12,7 +12,6 @@
 #include "attribute-reader.hpp"
 #include "descriptor-parser.hpp"
 
-
 JavaClassFile::JavaClassFile(const std::string& name)
 {
     if(name != "")
@@ -92,7 +91,31 @@ std::string JavaClassFile::decode() const
         Decoder decoder;
         auto instructions = decoder.decode(method.code.code);
         for(const Instruction& instruction: instructions)
-            oss << "        " << StringConverter::str(instruction) << "\n";
+        {
+            oss << "        " << StringConverter::str(instruction);
+
+            switch(instruction.mnemonic)
+            {
+                case GETFIELD:
+                case PUTFIELD:
+                case GETSTATIC:
+                case PUTSTATIC:
+                case INVOKEINTERFACE:
+                case INVOKESPECIAL:
+                case INVOKESTATIC:
+                case INVOKEVIRTUAL:
+                {
+                    JavaObjectRef ref = m_constantPool.getRef(instruction.operands[0].get());
+                    oss << "\t// " << StringConverter::str(ref);
+                }
+
+                default:
+                    break;
+
+            }
+
+            oss << "\n";
+        }
         oss << "    " << "}\n";
     }
 
@@ -263,16 +286,9 @@ void JavaClassFile::readMethods(StreamReader& reader)
 
         auto it = desc.begin();
 
-        ++it; // '('
-        while(*it != ')')
-        {
-            Type type = parseDescriptor(it, desc.end());
-            Variable var {type, "param" + std::to_string(method.parameters.size())};
-            method.parameters.push_back(var);
-        }
-
-        ++it; // ')'
-        method.type = parseDescriptor(it, desc.end());
+        ParsedMethodDescriptor parsed = parseMethodDescriptor(it, desc.end());
+        method.type = parsed.type;
+        method.parameters = parsed.parameters;
 
         // Attributes
         AttributeReader ar;

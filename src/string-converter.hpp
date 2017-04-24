@@ -62,8 +62,15 @@ public:
 
     /**
      * @brief Convert an instruction to a string
-     * @param instruction
-     * @return
+     * @param instruction Instruction
+     * @return String
      */
     static std::string str(const Instruction& instruction);
+
+    /**
+     * @brief Convert a java object ref to a string
+     * @param ref Reference
+     * @return String
+     */
+    static std::string str(const JavaObjectRef& ref);
 };

@@ -356,3 +356,26 @@ std::string StringConverter::str(const Instruction& instruction)
 
     return oss.str();
 }
+
+
+std::string StringConverter::str(const JavaObjectRef& ref)
+{
+    std::ostringstream oss;
+
+    oss << StringConverter::str(ref.type) << " ";
+    oss << ref.className << "." << ref.name;
+
+    if(ref.refType != JavaObjectRef::Field)
+    {
+        oss << "(";
+        for(auto it = ref.parameters.begin(); it != ref.parameters.end(); ++it)
+        {
+            oss << StringConverter::str(*it);
+            if(it != ref.parameters.end()-1)
+                oss << ", ";
+        }
+        oss << ")";
+    }
+
+    return oss.str();
+}

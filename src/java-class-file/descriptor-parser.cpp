@@ -81,3 +81,26 @@ Type parseDescriptor(std::string::iterator& first, std::string::iterator last)
 
     return type;
 }
+
+
+ParsedMethodDescriptor parseMethodDescriptor(std::string::iterator& first, std::string::iterator last)
+{
+    ParsedMethodDescriptor parsed;
+
+    if(*first != '(')
+        throw DescriptorParseError("Invalid descriptor");
+
+    ++first; // '('
+    while(*first != ')')
+    {
+        Type type = parseDescriptor(first, last);
+        Variable var {type, "param" + std::to_string(parsed.parameters.size())};
+        parsed.parameters.push_back(var);
+    }
+
+    ++first; // ')'
+
+    parsed.type = parseDescriptor(first, last);
+
+    return parsed;
+}

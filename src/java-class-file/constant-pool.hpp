@@ -4,6 +4,8 @@
 #include <vector>
 
 #include "../common.hpp"
+#include "../java-objects/type.hpp"
+#include "../java-objects/variable.hpp"
 #include "constant-pool-entry.hpp"
 
 
@@ -14,6 +16,33 @@ class ConstantPoolError: public Error
 {
 public:
     using Error::Error;
+};
+
+
+struct JavaObjectRef
+{
+    /** Ref objects types */
+    enum RefType
+    {
+        Field,
+        Method,
+        InterfaceMethod
+    };
+
+    /** Ref object */
+    RefType refType;
+
+    /** Type */
+    Type type;
+
+    /** Parameters (only Method and InterfaceMethod) */
+    std::vector<Variable> parameters;
+
+    /** Field name */
+    std::string name;
+
+    /** Class name */
+    std::string className;
 };
 
 
@@ -74,6 +103,13 @@ public:
      * @return Number of strings
      */
     std::size_t stringsSize() const;
+
+    /**
+     * @brief Get java object ref at index
+     * @param index Index
+     * @return Ref
+     */
+    JavaObjectRef getRef(uint16 index) const;
 
 
 private:
