@@ -7,10 +7,10 @@
 #include <sstream>
 
 #include "../streamreader.hpp"
-#include "../string-converter.hpp"
 #include "../decoder/decoder.hpp"
 #include "attribute-reader.hpp"
 #include "descriptor-parser.hpp"
+
 
 JavaClassFile::JavaClassFile(const std::string& name)
 {
@@ -70,29 +70,37 @@ ConstantPool JavaClassFile::constantPool() const
 
 std::string JavaClassFile::decode() const
 {
-    std::ostringstream oss;
+    std::string s;
 
-    oss << "/* CONSTANT POOL\n" << StringConverter::str(m_constantPool) << "*/\n";
+    // Constant pool
+    s += "/* CONSTANT POOL\n";
+    s += m_constantPool.str();
+    s += "*/\n";
 
-    oss << StringConverter::str(m_class) << "\n";
-    oss << "{\n";
+    // Class
+    s += m_class.str();
+    s += "\n";
+    s += "{\n";
 
+    // Fields
     for(const Field& field: m_class.fields)
-        oss << "    " << StringConverter::str(field) << ";\n";
+        s += "    " + field.str() + ";\n";
+    s += "\n";
 
-    oss << "\n";
-
+    // Methods
     for(const Method& method: m_class.methods)
     {
-        oss << "\n";
-        oss << "    " << StringConverter::str(method) << "\n";
-        oss << "    " << "{\n";
+        s += "    " + method.str() + "\n";
+        s += "    {\n";
 
+        // Decode
         Decoder decoder;
         auto instructions = decoder.decode(method.code.code);
+
+        // Print instructions
         for(const Instruction& instruction: instructions)
         {
-            oss << "        " << StringConverter::str(instruction);
+            s += "        " + instruction.str();
 
             switch(instruction.mnemonic)
             {
@@ -106,7 +114,7 @@ std::string JavaClassFile::decode() const
                 case INVOKEVIRTUAL:
                 {
                     JavaObjectRef ref = m_constantPool.getRef(instruction.operands[0].get());
-                    oss << "\t// " << StringConverter::str(ref);
+                    s += "\t// " + ref.str();
                 }
 
                 default:
@@ -114,14 +122,14 @@ std::string JavaClassFile::decode() const
 
             }
 
-            oss << "\n";
+            s += "\n";
         }
-        oss << "    " << "}\n";
+        s += "    }\n";
     }
 
-    oss << "}\n";
+    s += "}\n";
 
-    return oss.str();
+    return s;
 }
 
 

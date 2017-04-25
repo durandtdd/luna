@@ -10,11 +10,20 @@
  */
 struct Variable
 {
+public:
     /** Variable type */
     Type type;
 
     /** Variable name */
     std::string name;
+
+
+public:
+    /**
+     * @brief Convert variable to a string representation
+     * @return String
+     */
+    std::string str() const;
 };
 
 

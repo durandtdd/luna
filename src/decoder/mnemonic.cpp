@@ -3,7 +3,7 @@
 #include "mnemonic.hpp"
 
 
-std::string mnemonicStr(Mnemonic mnemonic)
+std::string str(Mnemonic mnemonic)
 {
     static std::string names[] = {
     "nop", "aconst_null", "iconst_m1", "iconst_0", "iconst_1", "iconst_2", "iconst_3", "iconst_4", 

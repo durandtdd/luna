@@ -2,6 +2,7 @@
 
 #include "../src/utils.hpp"
 
+
 TEST_CASE("String to bytes")
 {
     std::vector<uint8> bytes = stringToBytes("0123456789abcdef");
@@ -49,4 +50,39 @@ TEST_CASE("Dump bytes to a string")
     out = dump(std::vector<uint8>());
     exp = "";
     REQUIRE(out == exp);
+}
+
+
+TEST_CASE("Test strjoin")
+{
+    {
+    std::vector<std::string> v = {"a", "bc", "", "def"};
+    std::string s = strjoin(v.begin(), v.end(), ", ");
+    REQUIRE(s == "a, bc, , def");
+    }
+
+    {
+    std::vector<std::string> v = {"a"};
+    std::string s = strjoin(v.begin(), v.end(), ", ");
+    REQUIRE(s == "a");
+    }
+
+    {
+    std::vector<std::string> v = {};
+    std::string s = strjoin(v.begin(), v.end(), ", ");
+    REQUIRE(s == "");
+    }
+
+    {
+    std::vector<char> v = {'a', ';', 'b'};
+    std::string s = strjoin(v.begin(), v.end(), ";");
+    REQUIRE(s == "a;;;b");
+    }
+
+    {
+    struct S {int a; std::string b;};
+    std::vector<S> v = {{0, "a"}, {1, "bc"}, {2, ""}};
+    std::string s = strjoin(v.begin(), v.end(), ", ", [](auto e){return e.b;});
+    REQUIRE(s == "a, bc, ");
+    }
 }

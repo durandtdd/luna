@@ -11,6 +11,7 @@
 
 struct Field
 {
+public:
     /**
      * @brief Field access and property flags
      */
@@ -27,6 +28,8 @@ struct Field
         AccEnum = 0x4000
     };
 
+
+public:
     /** Field type */
     Type type;
 
@@ -38,4 +41,13 @@ struct Field
 
     /** Initial value */
     ConstantValue value;
+
+
+public:
+    /**
+     * @brief Convert field to a string representation
+     * @param allFlags If set to false, only print flags appearing in java code (public, static, final...)
+     * @return String
+     */
+    std::string str(bool allFlags = false) const;
 };

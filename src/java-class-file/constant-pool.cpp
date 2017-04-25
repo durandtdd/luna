@@ -1,8 +1,10 @@
 #include "constant-pool.hpp"
 
 #include <algorithm>
+#include <iomanip>
 #include <sstream>
 
+#include "../utils.hpp"
 #include "descriptor-parser.hpp"
 
 
@@ -109,4 +111,130 @@ JavaObjectRef ConstantPool::getRef(uint16 index) const
     }
 
     return ref;
+}
+
+
+std::string ConstantPool::str() const
+{
+    std::ostringstream oss;
+
+    for(std::size_t k=0; k<m_entries.size(); k++)
+    {
+        // Index
+        oss << "[" << std::setw(4) << std::setfill('0') << k << "] " << std::setw(0);
+
+        // Value
+        switch(m_entries[k].type())
+        {
+            case ConstantPoolEntry::Utf8:
+                oss << "[UTF8] " << string(k);
+                break;
+
+            case ConstantPoolEntry::Integer:
+                oss << "[Integer] ";
+                oss << "Value = " << m_entries[k].data();
+                break;
+
+            case ConstantPoolEntry::Float:
+                oss << "[Float] ";
+                oss << "Value = " << bytesToFloat(m_entries[k].data());
+                break;
+
+            case ConstantPoolEntry::Long:
+                oss << "[Long] ";
+                oss << "Value = " << m_entries[k].data();
+                break;
+
+            case ConstantPoolEntry::Double:
+                oss << "[Double] ";
+                oss << "Value = " << bytesToDouble(m_entries[k].data());
+                break;
+
+            case ConstantPoolEntry::Class:
+                oss << "[Class] ";
+                oss << "Name = " << m_entries[k].index1();
+                break;
+
+            case ConstantPoolEntry::String:
+                oss << "[String] ";
+                oss << "Value = " << m_entries[k].index1();
+                break;
+
+            case ConstantPoolEntry::FieldRef:
+                oss << "[FieldRef] ";
+                oss << "Class = " << m_entries[k].index1() << "; ";
+                oss << "NameAndType = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::MethodRef:
+                oss << "[MethodRef] ";
+                oss << "Class = " << m_entries[k].index1() << "; ";
+                oss << "NameAndType = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::InterfaceMethodRef:
+                oss << "[InterfaceMethodRef] ";
+                oss << "Class = " << m_entries[k].index1() << "; ";
+                oss << "NameAndType = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::NameAndType:
+                oss << "[NameAndType] ";
+                oss << "Name = " << m_entries[k].index1() << "; ";
+                oss << "Type = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::MethodHandle:
+                oss << "[MethodHandle] ";
+                oss << "Reference kind = " << m_entries[k].index1() << "; ";
+                oss << "Reference index = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::MethodType:
+                oss << "[MethodType] ";
+                oss << "Type = " << m_entries[k].index1();
+                break;
+
+            case ConstantPoolEntry::InvokeDynamic:
+                oss << "[InvokeDynamic] ";
+                oss << "Bootstrap = " << m_entries[k].index1() << "; ";
+                oss << "NameAndType = " << m_entries[k].index2();
+                break;
+
+            case ConstantPoolEntry::Invalid:
+                oss << "[Invalid]";
+                break;
+        }
+
+        oss << "\n";
+    }
+
+    return oss.str();
+}
+
+
+std::string JavaObjectRef::str() const
+{
+    std::string s;
+
+    // Type
+    s += type.str();
+    s += " ";
+
+    // Class
+    s += className;
+    s += ".";
+
+    // Name
+    s += name;
+
+    // Parameters
+    if(refType != JavaObjectRef::Field)
+    {
+        s += "(";
+        s += strjoin(parameters.begin(), parameters.end(), ", ", [](auto e) {return e.str();});
+        s += ")";
+    }
+
+    return s;
 }

@@ -77,7 +77,7 @@ def write_mnemonic_enum(path_src, opcodes):
     s += "{\n"
     s += generate_enum(opcodes) + "\n"
     s += "};\n\n"
-    s += "std::string mnemonicStr(Mnemonic mnemonic);\n"
+    s += "std::string str(Mnemonic mnemonic);\n"
     
     with open(path_src + "mnemonic.hpp", 'w') as file:
         file.write(s)
@@ -85,7 +85,7 @@ def write_mnemonic_enum(path_src, opcodes):
 
     s = generate_warning()
     s += "#include \"mnemonic.hpp\"\n\n\n"
-    s += "std::string mnemonicStr(Mnemonic mnemonic)\n"
+    s += "std::string str(Mnemonic mnemonic)\n"
     s += "{\n"
     s += "    static std::string names[] = {\n"
     s += generate_enum_strings(opcodes);

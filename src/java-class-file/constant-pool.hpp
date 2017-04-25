@@ -19,8 +19,12 @@ public:
 };
 
 
+/**
+ * @brief Reference object stored in the constant pool
+ */
 struct JavaObjectRef
 {
+public:
     /** Ref objects types */
     enum RefType
     {
@@ -29,6 +33,8 @@ struct JavaObjectRef
         InterfaceMethod
     };
 
+
+public:
     /** Ref object */
     RefType refType;
 
@@ -43,6 +49,14 @@ struct JavaObjectRef
 
     /** Class name */
     std::string className;
+
+
+public:
+    /**
+     * @brief Convert java object ref to a string representation
+     * @return String
+     */
+    std::string str() const;
 };
 
 
@@ -110,6 +124,12 @@ public:
      * @return Ref
      */
     JavaObjectRef getRef(uint16 index) const;
+
+    /**
+     * @brief Convert constant pool to a string representation
+     * @return String
+     */
+    std::string str() const;
 
 
 private:

@@ -40,4 +40,13 @@ struct Method
 
     /** Code */
     Code code;
+
+
+public:
+    /**
+     * @brief Convert method to a string representation
+     * @param allFlags If set to false, only print flags appearing in java code (public, static...)
+     * @return String
+     */
+    std::string str(bool allFlags = false) const;
 };

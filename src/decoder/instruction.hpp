@@ -13,6 +13,7 @@
  */
 struct Instruction
 {
+public:
     /** Instruction name (nop, ldiv...) */
     Mnemonic mnemonic = INVALID;
 
@@ -21,4 +22,12 @@ struct Instruction
 
     /** Instruction offset */
     uint32 offset = 0;
+
+
+public:
+    /**
+     * @brief Convert instruction to a string representation
+     * @return String
+     */
+    std::string str() const;
 };

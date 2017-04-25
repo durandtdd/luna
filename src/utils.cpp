@@ -77,7 +77,9 @@ float bytesToFloat(uint64 bytes)
     return *reinterpret_cast<float*>(&b);
 }
 
+
 double bytesToDouble(uint64 bytes)
 {
     return *reinterpret_cast<double*>(&bytes);
 }
+

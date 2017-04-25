@@ -3,8 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "string-converter.hpp"
-
 
 CommandLineInterface::CommandLineInterface(const std::string& filename)
 {
@@ -48,7 +46,7 @@ void CommandLineInterface::printFields() const
 {
     std::cout << "Fields:\n";
     for(const Field& field: m_class.fields)
-        std::cout << "    " << StringConverter::str(field, true) << "\n";
+        std::cout << "    " << field.str(true) << "\n";
     std::cout << "\n";
 }
 
@@ -57,7 +55,7 @@ void CommandLineInterface::printMethods() const
 {
     std::cout << "Methods:\n";
     for(const Method& method: m_class.methods)
-        std::cout << "    " << StringConverter::str(method, true) << "\n";
+        std::cout << "    " << method.str(true) << "\n";
     std::cout << "\n";
 }
 
@@ -65,7 +63,7 @@ void CommandLineInterface::printMethods() const
 void CommandLineInterface::printConstantPool() const
 {
     std::cout << "Constant pool:\n" << std::endl;
-    std::cout << StringConverter::str(m_file.constantPool()) << std::endl;
+    std::cout << m_file.constantPool().str() << std::endl;
 }
 
 

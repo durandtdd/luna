@@ -8,6 +8,7 @@
 
 struct Class
 {
+public:
     /**
      * @brief Class access and property flags
      */
@@ -23,6 +24,8 @@ struct Class
         AccEnum = 0x4000
     };
 
+
+public:
     /** Class name */
     std::string name;
 
@@ -40,4 +43,13 @@ struct Class
 
     /** Flags */
     uint16 flags = 0;
+
+
+public:
+    /**
+     * @brief Convert class to a string representation
+     * @param allFlags If set to false, only print flags appearing in java code (public, final...)
+     * @return String
+     */
+    std::string str(bool allFlags = false) const;
 };

@@ -36,4 +36,4 @@ enum Mnemonic
 
 };
 
-std::string mnemonicStr(Mnemonic mnemonic);
+std::string str(Mnemonic mnemonic);
