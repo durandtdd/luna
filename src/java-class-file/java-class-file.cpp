@@ -42,11 +42,10 @@ void JavaClassFile::open(const std::string& name)
     m_class.flags = reader.read<uint16>(); // Access flags
 
     uint16 idxName = reader.read<uint16>();
-    m_class.name = m_constantPool.string(m_constantPool[idxName].index1());
+    m_class.name = m_constantPool.getRef(idxName)->str();
 
     uint16 idxSuperName = reader.read<uint16>();
-    m_class.base = m_constantPool.string(m_constantPool[idxSuperName].index1());
-    std::replace(m_class.base.begin(), m_class.base.end(), '/', '.');
+    m_class.base = m_constantPool.getRef(idxSuperName)->str();
 
     readInterfaces(reader);
 
@@ -112,10 +111,7 @@ std::string JavaClassFile::decode() const
                 case INVOKESPECIAL:
                 case INVOKESTATIC:
                 case INVOKEVIRTUAL:
-                {
-                    JavaObjectRef ref = m_constantPool.getRef(instruction.operands[0].get());
-                    s += "\t// " + ref.str();
-                }
+                    s += "\t// " + m_constantPool.getRef(instruction.operands[0].get())->str();
 
                 default:
                     break;
@@ -172,11 +168,8 @@ void JavaClassFile::readConstantPool(StreamReader& reader)
                 for(uint16 k=0; k<length; k++)
                     str[k] = reader.read<uint8>();
 
-                // Add to string table
-                m_constantPool.addString(str);
-
-                // Set entry index to string table index
-                cpe.setIndex1((uint16)m_constantPool.stringsSize()-1);
+                // Add string and set entry index to string table index
+                cpe.setIndex1(m_constantPool.addString(str));
                 break;
             }
 
@@ -231,7 +224,7 @@ void JavaClassFile::readInterfaces(StreamReader& reader)
     for(uint16 k=0; k<interfacesCount; k++)
     {
         uint16 idx = reader.read<uint16>(); // Class index
-        std::string interface = m_constantPool.string(m_constantPool[idx].index1());
+        std::string interface = m_constantPool.getRef(idx)->str();
         std::replace(interface.begin(), interface.end(), '/', '.');
         m_class.interfaces.push_back(interface);
     }
@@ -251,13 +244,12 @@ void JavaClassFile::readFields(StreamReader& reader)
 
         // Name
         uint16 nameIndex = reader.read<uint16>();
-        field.name = m_constantPool.string(nameIndex);
+        field.name = m_constantPool.getString(nameIndex);
 
         // Descriptor
         uint16 descriptorIndex = reader.read<uint16>();
-        std::string desc = m_constantPool.string(descriptorIndex);
-        auto it = desc.begin();
-        field.type = parseDescriptor(it, desc.end());
+        std::string desc = m_constantPool.getString(descriptorIndex);
+        field.type = parseDescriptor(desc.begin(), desc.end());
 
         // Attributes
         AttributeReader ar;
@@ -286,11 +278,11 @@ void JavaClassFile::readMethods(StreamReader& reader)
 
         // Name
         uint16 nameIndex = reader.read<uint16>();
-        method.name = m_constantPool.string(nameIndex);
+        method.name = m_constantPool.getString(nameIndex);
 
         // Descriptor
         uint16 descriptorIndex = reader.read<uint16>();
-        std::string desc = m_constantPool.string(descriptorIndex);
+        std::string desc = m_constantPool.getString(descriptorIndex);
 
         auto it = desc.begin();
 

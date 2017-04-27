@@ -22,18 +22,39 @@ TEST_CASE("Descriptor parsing")
     REQUIRE(parseDescriptor(it, str.end()) == Type::tByte(2));
 
     str = "[[[";
-    it = str.begin();
-    REQUIRE_THROWS(parseDescriptor(it, str.end()));
+    REQUIRE_THROWS(parseDescriptor(str.begin(), str.end()));
 
     str = "[[[T";
-    it = str.begin();
-    REQUIRE_THROWS(parseDescriptor(it, str.end()));
+    REQUIRE_THROWS(parseDescriptor(str.begin(), str.end()));
 
     str = "T";
-    it = str.begin();
-    REQUIRE_THROWS(parseDescriptor(it, str.end()));
+    REQUIRE_THROWS(parseDescriptor(str.begin(), str.end()));
 
     str = "Ljava.lang.Object";
     it = str.begin();
     REQUIRE_THROWS(parseDescriptor(it, str.end()));
+}
+
+
+TEST_CASE("Method descriptor parsing")
+{
+    std::string str = "()V";
+    auto parsed = parseMethodDescriptor(str.begin(), str.end());
+
+    REQUIRE(parsed.type == Type::tVoid());
+    REQUIRE(parsed.parameters.size() == 0);
+
+    str = "([[[DLjava.lang.Object;)Ljava.lang.Object;";
+    parsed = parseMethodDescriptor(str.begin(), str.end());
+
+    REQUIRE(parsed.type == Type::tObject("java.lang.Object"));
+    REQUIRE(parsed.parameters.size() == 2);
+    REQUIRE(parsed.parameters[0].type == Type::tDouble(3));
+    REQUIRE(parsed.parameters[1].type == Type::tObject("java.lang.Object"));
+
+    str = "()";
+    REQUIRE_THROWS(parseDescriptor(str.begin(), str.end()));
+
+    str = "(V";
+    REQUIRE_THROWS(parseDescriptor(str.begin(), str.end()));
 }

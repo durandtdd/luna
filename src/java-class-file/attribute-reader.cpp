@@ -12,11 +12,11 @@ void AttributeReader::readAttributes(StreamReader& reader, const ConstantPool& p
         uint16 nameIndex = reader.read<uint16>();
         uint32 length = reader.read<uint32>();
 
-        if(pool.string(nameIndex) == "ConstantValue")
+        if(pool.getString(nameIndex) == "ConstantValue")
         {
             readConstantValue(reader, pool);
         }
-        else if(pool.string(nameIndex) == "Code")
+        else if(pool.getString(nameIndex) == "Code")
         {
             readCode(reader, pool);
         }
@@ -51,22 +51,18 @@ void AttributeReader::readConstantValue(StreamReader& reader, const ConstantPool
         case ConstantPoolEntry::Integer:
         case ConstantPoolEntry::Long:
             a->isSet = true;
-            a->intValue = pool[idx].data();
+            a->intValue = pool.getInt(idx);
             break;
 
         case ConstantPoolEntry::Float:
-            a->isSet = true;
-            a->doubleValue = bytesToFloat(pool[idx].data());
-            break;
-
         case ConstantPoolEntry::Double:
             a->isSet = true;
-            a->doubleValue = bytesToDouble(pool[idx].data());
+            a->doubleValue = pool.getDouble(idx);
             break;
 
         case ConstantPoolEntry::String:
             a->isSet = true;
-            a->stringValue = pool.string(pool[idx].index1());
+            a->stringValue = pool.getString(idx);
             break;
 
         default:
@@ -99,7 +95,7 @@ void AttributeReader::readCode(StreamReader& reader, const ConstantPool& pool)
         exception.end = reader.read<uint16>();
         exception.handler = reader.read<uint16>();
         uint16 idx = reader.read<uint16>();
-        exception.type = pool.string(pool[idx].index1());
+        exception.type = pool.getRef(idx)->str();
         a->exceptions.push_back(exception);
     }
 

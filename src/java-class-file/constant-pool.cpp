@@ -14,24 +14,10 @@ void ConstantPool::addEntry(const ConstantPoolEntry& cpe)
 }
 
 
-void ConstantPool::addString(const std::string& str)
+uint16 ConstantPool::addString(const std::string& str)
 {
     m_strings.push_back(str);
-}
-
-
-std::string ConstantPool::string(uint16 index) const
-{
-    if(index >= m_entries.size())
-        throw ConstantPoolError("Index out of range");
-
-    if(m_entries[index].type() != ConstantPoolEntry::Utf8)
-        throw ConstantPoolError("ConstantPoolEntry is not UTF8");
-
-    if(m_entries[index].index1() >= m_strings.size())
-        throw ConstantPoolError("Invalid string table index");
-
-    return m_strings[m_entries[index].index1()];
+    return (uint16) m_strings.size()-1;
 }
 
 
@@ -59,58 +45,137 @@ size_t ConstantPool::size() const
 }
 
 
-size_t ConstantPool::stringsSize() const
+std::string ConstantPool::getString(uint16 index) const
 {
-    return m_strings.size();
+    if(index >= m_entries.size())
+        throw ConstantPoolError("Index out of range");
+
+    if(m_entries[index].type() == ConstantPoolEntry::String)
+    {
+        index = m_entries[index].index1();
+
+        if(index >= m_entries.size())
+            throw ConstantPoolError("Index out of range");
+    }
+
+    if(m_entries[index].type() != ConstantPoolEntry::Utf8)
+        throw ConstantPoolError("ConstantPoolEntry is not UTF8");
+
+    if(m_entries[index].index1() >= m_strings.size())
+        throw ConstantPoolError("Invalid string table index");
+
+    return m_strings[m_entries[index].index1()];
 }
 
 
-JavaObjectRef ConstantPool::getRef(uint16 index) const
+std::shared_ptr<JavaObjectRef> ConstantPool::getRef(uint16 index) const
 {
-    JavaObjectRef ref;
-
     // Ref type
     auto cpe = (*this)[index];
     switch(cpe.type())
     {
         case ConstantPoolEntry::FieldRef:
-            ref.refType = JavaObjectRef::Field;
-            break;
+        {
+            std::shared_ptr<FieldRef> ref(new FieldRef());
+
+            // Class name
+            ref->className = getRef(cpe.index1())->str();
+            std::replace(ref->className.begin(), ref->className.end(), '/', '.');
+
+            // Field name
+            auto nameAndType = (*this)[cpe.index2()];
+            ref->name = getString(nameAndType.index1());
+
+            // Field type
+            std::string descriptor = getString(nameAndType.index2());
+            ref->type = parseDescriptor(descriptor.begin(), descriptor.end());
+
+            return ref;
+        }
 
         case ConstantPoolEntry::MethodRef:
-            ref.refType = JavaObjectRef::Method;
-            break;
-
         case ConstantPoolEntry::InterfaceMethodRef:
-            ref.refType = JavaObjectRef::InterfaceMethod;
-            break;
+        {
+            std::shared_ptr<MethodRef> ref(new MethodRef());
+
+            // Class name
+            ref->className = getRef(cpe.index1())->str();
+            std::replace(ref->className.begin(), ref->className.end(), '/', '.');
+
+            // Field name
+            auto nameAndType = (*this)[cpe.index2()];
+            ref->name = getString(nameAndType.index1());
+
+            // Field type
+            std::string descriptor = getString(nameAndType.index2());
+            auto parsed = parseMethodDescriptor(descriptor.begin(), descriptor.end());
+            ref->type = parsed.type;
+            ref->parameters = parsed.parameters;
+            return ref;
+        }
+
+        case ConstantPoolEntry::Class:
+        {
+            std::shared_ptr<ClassRef> ref(new ClassRef());
+
+            // Class name
+            std::string s = getString(cpe.index1());
+            if(s.size()>1 && (s.front() == '[' || s.back() == ';'))
+                ref->className = parseDescriptor(s.begin(), s.end()).str();
+            else
+            {
+                ref->className = s;
+                std::replace(ref->className.begin(), ref->className.end(), '/', '.');
+            }
+
+            return ref;
+        }
 
         default:
             throw ConstantPoolError("Entry is not a reference");
     }
+}
 
-    // Class name
-    ref.className = string((*this)[cpe.index1()].index1());
-    std::replace(ref.className.begin(), ref.className.end(), '/', '.');
 
-    // Ref name
-    auto nameAndType = (*this)[cpe.index2()];
-    ref.name = string(nameAndType.index1());
+int64 ConstantPool::getInt(uint16 index) const
+{
+    auto cpe = (*this)[index];
 
-    // Ref type
-    std::string descriptor = string(nameAndType.index2());
-    auto it = descriptor.begin();
-
-    if(ref.refType == JavaObjectRef::Field)
-        ref.type = parseDescriptor(it, descriptor.end());
-    else
+    switch(cpe.type())
     {
-        auto parsed = parseMethodDescriptor(it, descriptor.end());
-        ref.type = parsed.type;
-        ref.parameters = parsed.parameters;
-    }
+        case ConstantPoolEntry::Integer:
+            return (int32)cpe.data();
 
-    return ref;
+        case ConstantPoolEntry::Long:
+            return (int64)cpe.data();
+
+        default:
+            throw ConstantPoolError("Entry is not an integer");
+    }
+}
+
+
+double ConstantPool::getDouble(uint16 index) const
+{
+    auto cpe = (*this)[index];
+
+    switch(cpe.type())
+    {
+        case ConstantPoolEntry::Float:
+        {
+            uint32 d = (uint32)cpe.data();
+            return *reinterpret_cast<float*>(&d);
+        }
+
+        case ConstantPoolEntry::Double:
+        {
+            uint64 d = cpe.data();
+            return *reinterpret_cast<double*>(&d);
+        }
+
+        default:
+            throw ConstantPoolError("Entry is not float");
+    }
 }
 
 
@@ -127,27 +192,27 @@ std::string ConstantPool::str() const
         switch(m_entries[k].type())
         {
             case ConstantPoolEntry::Utf8:
-                oss << "[UTF8] " << string(k);
+                oss << "[UTF8] " << getString(k);
                 break;
 
             case ConstantPoolEntry::Integer:
                 oss << "[Integer] ";
-                oss << "Value = " << m_entries[k].data();
+                oss << "Value = " << getInt(k);
                 break;
 
             case ConstantPoolEntry::Float:
                 oss << "[Float] ";
-                oss << "Value = " << bytesToFloat(m_entries[k].data());
+                oss << "Value = " << getDouble(k);
                 break;
 
             case ConstantPoolEntry::Long:
                 oss << "[Long] ";
-                oss << "Value = " << m_entries[k].data();
+                oss << "Value = " << getInt(k);
                 break;
 
             case ConstantPoolEntry::Double:
                 oss << "[Double] ";
-                oss << "Value = " << bytesToDouble(m_entries[k].data());
+                oss << "Value = " << getDouble(k);
                 break;
 
             case ConstantPoolEntry::Class:
@@ -210,31 +275,4 @@ std::string ConstantPool::str() const
     }
 
     return oss.str();
-}
-
-
-std::string JavaObjectRef::str() const
-{
-    std::string s;
-
-    // Type
-    s += type.str();
-    s += " ";
-
-    // Class
-    s += className;
-    s += ".";
-
-    // Name
-    s += name;
-
-    // Parameters
-    if(refType != JavaObjectRef::Field)
-    {
-        s += "(";
-        s += strjoin(parameters.begin(), parameters.end(), ", ", [](auto e) {return e.str();});
-        s += ")";
-    }
-
-    return s;
 }

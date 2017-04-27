@@ -1,12 +1,12 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "../common.hpp"
-#include "../java-objects/type.hpp"
-#include "../java-objects/variable.hpp"
 #include "constant-pool-entry.hpp"
+#include "java-object-ref.hpp"
 
 
 /**
@@ -16,47 +16,6 @@ class ConstantPoolError: public Error
 {
 public:
     using Error::Error;
-};
-
-
-/**
- * @brief Reference object stored in the constant pool
- */
-struct JavaObjectRef
-{
-public:
-    /** Ref objects types */
-    enum RefType
-    {
-        Field,
-        Method,
-        InterfaceMethod
-    };
-
-
-public:
-    /** Ref object */
-    RefType refType;
-
-    /** Type */
-    Type type;
-
-    /** Parameters (only Method and InterfaceMethod) */
-    std::vector<Variable> parameters;
-
-    /** Field name */
-    std::string name;
-
-    /** Class name */
-    std::string className;
-
-
-public:
-    /**
-     * @brief Convert java object ref to a string representation
-     * @return String
-     */
-    std::string str() const;
 };
 
 
@@ -79,16 +38,9 @@ public:
     /**
      * @brief Add a string
      * @param str String
+     * @return Index of added string
      */
-    void addString(const std::string& str);
-
-    /**
-     * @brief Get string of entry (only Utf8)
-     * @param index Index of entry
-     * @return String
-     * @throw ConstantPoolError If index is out of range or entry is not Utf8
-     */
-    std::string string(uint16 index) const;
+    uint16 addString(const std::string& str);
 
     /**
      * @brief Get entry
@@ -113,17 +65,36 @@ public:
     std::size_t size() const;
 
     /**
-     * @brief Return number of strings in the string table
-     * @return Number of strings
+     * @brief Get string at index (only Utf8 or String)
+     * @param index Index
+     * @return String
+     * @throw ConstantPoolError If index is out of range or entry is not Utf8 or String
      */
-    std::size_t stringsSize() const;
+    std::string getString(uint16 index) const;
 
     /**
      * @brief Get java object ref at index
      * @param index Index
-     * @return Ref
+     * @return Reference
+     * @throw ConstantPoolError If index is out of range or entry is not a reference
      */
-    JavaObjectRef getRef(uint16 index) const;
+    std::shared_ptr<JavaObjectRef> getRef(uint16 index) const;
+
+    /**
+     * @brief Get int at index
+     * @param index Index
+     * @return Int value
+     * @throw ConstantPoolError If index is out of range or entry is not a reference
+     */
+    int64 getInt(uint16 index) const;
+
+    /**
+     * @brief Get double at index
+     * @param index Index
+     * @return Int value
+     * @throw ConstantPoolError If index is out of range or entry is not a reference
+     */
+    double getDouble(uint16 index) const;
 
     /**
      * @brief Convert constant pool to a string representation
