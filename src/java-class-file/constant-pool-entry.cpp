@@ -4,10 +4,19 @@
 #include <sstream>
 
 
-ConstantPoolEntry::ConstantPoolEntry(ConstantPoolEntry::Type type):
+ConstantPoolEntry::ConstantPoolEntry(ConstantPoolEntry::Type type, uint64 data):
+    m_type(type),
+    m_data(data)
+{
+}
+
+
+ConstantPoolEntry::ConstantPoolEntry(Type type, uint16 index1, uint16 index2):
     m_type(type),
     m_data(0)
 {
+    setIndex1(index1);
+    setIndex2(index2);
 }
 
 

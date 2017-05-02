@@ -8,89 +8,33 @@
 TEST_CASE("Constant pool")
 {
     ConstantPool cp;
-    ConstantPoolEntry cpe(ConstantPoolEntry::Invalid);
 
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Utf8);
-    cpe.setIndex1(0);
-    cp.addEntry(cpe);
     cp.addString("[[[D");
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Utf8);
-    cpe.setIndex1(1);
-    cp.addEntry(cpe);
     cp.addString("java/lang/Object");
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Utf8);
-    cpe.setIndex1(2);
-    cp.addEntry(cpe);
     cp.addString("Ljava/lang/Object;");
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Utf8);
-    cpe.setIndex1(3);
-    cp.addEntry(cpe);
     cp.addString("(I)V");
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Utf8);
-    cpe.setIndex1(4);
-    cp.addEntry(cpe);
     cp.addString("name");
 
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Class);
-    cpe.setIndex1(0);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Class);
-    cpe.setIndex1(1);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Class);
-    cpe.setIndex1(2);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::NameAndType);
-    cpe.setIndex1(4);
-    cpe.setIndex2(0);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::NameAndType);
-    cpe.setIndex1(4);
-    cpe.setIndex2(3);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::FieldRef);
-    cpe.setIndex1(6);
-    cpe.setIndex2(8);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::MethodRef);
-    cpe.setIndex1(6);
-    cpe.setIndex2(9);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::InterfaceMethodRef);
-    cpe.setIndex1(6);
-    cpe.setIndex2(9);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::String);
-    cpe.setIndex1(3);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Integer);
-    cpe.setData(0xffffffff);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Long);
-    cpe.setData(0xffffffffffffffff);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Float);
-    cpe.setData(0x3fcf1aa0);
-    cp.addEntry(cpe);
-
-    cpe = ConstantPoolEntry(ConstantPoolEntry::Double);
-    cpe.setData(0x3ff9e353f7ced917);
-    cp.addEntry(cpe);
+    /*  0 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Utf8, 0, 0));
+    /*  1 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Utf8, 1, 0));
+    /*  2 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Utf8, 2, 0));
+    /*  3 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Utf8, 3, 0));
+    /*  4 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Utf8, 4, 0));
+    /*  5 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Class, 0, 0));
+    /*  6 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Class, 1, 0));
+    /*  7 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Class, 2, 0));
+    /*  8 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::NameAndType, 4, 0));
+    /*  9 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::NameAndType, 4, 3));
+    /* 10 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::FieldRef, 6, 8));
+    /* 11 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::MethodRef, 6, 9));
+    /* 12 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::InterfaceMethodRef, 6, 9));
+    /* 13 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::String, 3, 0));
+    /* 14 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Integer, 0xffffffff));
+    /* 15 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Long, 0xffffffffffffffff));
+    /* 16 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Invalid));
+    /* 17 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Float, 0x3fcf1aa0));
+    /* 18 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Double, 0x3ff9e353f7ced917));
+    /* 19 */ cp.addEntry(ConstantPoolEntry(ConstantPoolEntry::Invalid));
 
 
     REQUIRE(cp.getString(0) == "[[[D");
@@ -109,12 +53,12 @@ TEST_CASE("Constant pool")
     REQUIRE(cp.getString(13) == "(I)V");
     REQUIRE(cp.getInt(14) == -1);
     REQUIRE(cp.getInt(15) == -1);
-    REQUIRE(std::abs(cp.getDouble(16)-1.618) < 0.0001);
     REQUIRE(std::abs(cp.getDouble(17)-1.618) < 0.0001);
+    REQUIRE(std::abs(cp.getDouble(18)-1.618) < 0.0001);
 
     REQUIRE_THROWS(cp.getString(5));
     REQUIRE_THROWS(cp.getRef(0));
     REQUIRE_THROWS(cp.getInt(0));
     REQUIRE_THROWS(cp.getDouble(0));
-    REQUIRE_THROWS(cp[18]);
+    REQUIRE_THROWS(cp[20]);
 }

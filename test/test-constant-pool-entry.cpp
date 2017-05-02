@@ -11,12 +11,18 @@ TEST_CASE("Constant pool entry")
     entry.setData(0xdeadbeef);
     REQUIRE(entry.data() == 0xdeadbeef);
 
+    entry = ConstantPoolEntry(ConstantPoolEntry::Integer, 0xdeadbeef);
+    REQUIRE(entry.data() == 0xdeadbeef);
+
     entry.setType(ConstantPoolEntry::NameAndType);
     entry.setIndex1(0x0001);
     entry.setIndex2(0x0002);
     REQUIRE(entry.index1() == 0x0001);
     REQUIRE(entry.index2() == 0x0002);
 
+    entry = ConstantPoolEntry(ConstantPoolEntry::NameAndType, 0x0001, 0x0002);
+    REQUIRE(entry.index1() == 0x0001);
+    REQUIRE(entry.index2() == 0x0002);
 
     REQUIRE(ConstantPoolEntry::typeFromInt(0x00) == ConstantPoolEntry::Invalid);
     REQUIRE(ConstantPoolEntry::typeFromInt(0x01) == ConstantPoolEntry::Utf8);

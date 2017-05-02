@@ -61,10 +61,19 @@ public:
 
 public:
     /**
-     * @brief Construct a ConstantPoolEntry
+     * @brief Construct a ConstantPoolEntry with data
      * @param type Entry type
+     * @param data Data
      */
-    ConstantPoolEntry(Type type);
+    ConstantPoolEntry(Type type = Invalid, uint64 data = 0);
+
+    /**
+     * @brief Construct a ConstantPoolEntry with indices
+     * @param type Entry type
+     * @param index1 Index 1
+     * @param index2 Index 2
+     */
+    ConstantPoolEntry(Type type, uint16 index1, uint16 index2);
 
     /**
      * @brief Get entry type
